@@ -181,10 +181,19 @@ fun ClothesDetailsBottomSheet(clothes: Clothes) {
 }
 
 @Composable
-fun WeatherDetails(data: WeatherModel, weatherViewModel: WeatherViewModel,clothesViewModel: ClothesViewModel) {
+fun WeatherDetails(
+    data: WeatherModel,
+    weatherViewModel: WeatherViewModel,
+    clothesViewModel: ClothesViewModel
+) {
     var isExpanded by remember { mutableStateOf(false) }
     var cityName by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Hava durumu güncellendiğinde kıyafetleri değiştir
+    LaunchedEffect(data.current.temp_c) {
+        clothesViewModel.fetchAndUpdateClothes(data) // Hava durumu verisini ClothesViewModel'e gönder
+    }
 
     Column(
         modifier = Modifier
@@ -208,7 +217,6 @@ fun WeatherDetails(data: WeatherModel, weatherViewModel: WeatherViewModel,clothe
             )
             IconButton(onClick = {
                 weatherViewModel.getData(cityName)
-                clothesViewModel.getClothesList()
                 keyboardController?.hide()
             }) {
                 Icon(
@@ -313,6 +321,7 @@ fun WeatherDetails(data: WeatherModel, weatherViewModel: WeatherViewModel,clothe
         }
     }
 }
+
 
 @Composable
 fun WeatherKeyValue(key: String, value: String) {
