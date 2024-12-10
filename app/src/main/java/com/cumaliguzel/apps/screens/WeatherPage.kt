@@ -2,16 +2,11 @@ package com.cumaliguzel.apps.screens
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -161,12 +156,12 @@ fun GenderSelectionDropdown(
                 imageVector = if (selectedGender == "male") Icons.Default.Man else Icons.Default.Woman,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(54.dp)
-                    .padding(end = 8.dp, start = 8.dp),
+                    .size(44.dp)
+                    .padding(end = 8.dp),
                 tint = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = "Gender: ${if (selectedGender == "Male") "Male" else "Female"}",
+                text = "Gender: ${if (selectedGender == "male") "Male" else "Female"}",
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f)
@@ -184,20 +179,21 @@ fun GenderSelectionDropdown(
             DropdownMenuItem(
                 text = { Text("Male") },
                 onClick = {
-                    onGenderSelected("male")
+                    onGenderSelected("male") // lowercase değer döndürüyoruz
                     expanded = false
                 }
             )
             DropdownMenuItem(
                 text = { Text("Female") },
                 onClick = {
-                    onGenderSelected("female")
+                    onGenderSelected("female") // lowercase değer döndürüyoruz
                     expanded = false
                 }
             )
         }
     }
 }
+
 
 @Composable
 fun ClothesCard(clothes: Clothes, onClick: () -> Unit) {
