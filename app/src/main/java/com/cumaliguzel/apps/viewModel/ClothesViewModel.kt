@@ -11,37 +11,37 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class ClothesViewModel : ViewModel() {
 
-    // Firestore'dan gelen kıyafet listesini tutan StateFlow
     private var _clothesList = MutableStateFlow<List<Clothes>>(emptyList())
     val clothesList = _clothesList.asStateFlow()
 
-    // Hava durumu verisi (WeatherModel)
     var weatherData: WeatherModel? = null
 
-    /**
-     * Hava durumu verisi güncellendiğinde, sıcaklığa göre doğru koleksiyonu seç
-     * ve Firestore'dan verileri al.
-     */
+    // Cinsiyet seçimi için StateFlow
+    private var _gender = MutableStateFlow("male") // Varsayılan olarak "male"
+    val gender = _gender.asStateFlow()
+
+    fun setGender(selectedGender: String) {
+        _gender.value = selectedGender
+        updateWeatherAndFetchClothes() // Cinsiyet değiştiğinde kıyafet listesini yenile
+    }
+
     fun updateWeatherAndFetchClothes() {
         val tempC = weatherData?.current?.temp_c
+        val gender = _gender.value
         if (tempC != null) {
-            // temp_c'ye göre uygun koleksiyonu belirle
+            // temp_c'ye ve cinsiyete göre uygun koleksiyonu belirle
             val collectionName = when {
-                tempC < 10 -> "menwinter" // 10°C altı için
-                tempC in 10.0..20.0 -> "menspring" // 10-20°C arası
-                tempC > 20 -> "mensummer" // 20°C üstü
-                else -> "menwinter" // Varsayılan koleksiyon
+                tempC < 10 -> if (gender == "male") "menwinter" else "womenwinter"
+                tempC in 10.0..20.0 -> if (gender == "male") "menspring" else "womenspring"
+                tempC > 20 -> if (gender == "male") "mensummer" else "womensummer"
+                else -> if (gender == "male") "menwinter" else "womenwinter"
             }
-            // Seçilen koleksiyondan verileri al
             getClothesList(collectionName)
         } else {
             println("Hava durumu bilgisi yok.")
         }
     }
 
-    /**
-     * Belirtilen koleksiyondan kıyafet listesini getir ve StateFlow'u güncelle.
-     */
     private fun getClothesList(collectionName: String) {
         val db = Firebase.firestore
         db.collection(collectionName).addSnapshotListener { value, error ->
@@ -50,18 +50,13 @@ class ClothesViewModel : ViewModel() {
                 return@addSnapshotListener
             }
             if (value != null) {
-                // Firestore'dan gelen verileri listeye çevir ve güncelle
                 _clothesList.value = value.toObjects()
             }
         }
     }
 
-    /**
-     * Dışarıdan WeatherModel ile hava durumunu güncelle ve kıyafet listesini yenile.
-     */
     fun fetchAndUpdateClothes(weatherModel: WeatherModel) {
         weatherData = weatherModel
         updateWeatherAndFetchClothes()
     }
 }
-

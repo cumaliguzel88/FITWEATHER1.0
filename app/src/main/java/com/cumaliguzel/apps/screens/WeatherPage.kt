@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -25,7 +26,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Man
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Woman
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -47,8 +50,8 @@ fun WeatherAndClothesPage(
 ) {
     val weatherResult = weatherViewModel.weatherResult.observeAsState()
     val clothesList by clothesViewModel.clothesList.collectAsStateWithLifecycle(emptyList())
+    val selectedGender by clothesViewModel.gender.collectAsState() // Cinsiyet seçimi için StateFlow
     val context = LocalContext.current
-
 
     // BottomSheet için state
     var isBottomSheetVisible by remember { mutableStateOf(false) }
@@ -73,48 +76,52 @@ fun WeatherAndClothesPage(
         }
     }
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp)
-    ) {
-        // Hava durumu detayları
-        item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-            when (val result = weatherResult.value) {
-                is NetworkResponse.Error -> {
-                    Spacer(modifier = Modifier.height(26.dp))
-                    Text(text = "Error: ${result.message}", fontWeight = FontWeight.Bold)
-                }
-                is NetworkResponse.Loading -> {
-                    CircularProgressIndicator()
-                }
-                is NetworkResponse.Success -> {
-                    WeatherDetails(data = result.data, weatherViewModel,clothesViewModel)
-                }
-                null -> {}
-            }
-        }
+    Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
+        // Cinsiyet seçimi için Dropdown
 
-        // Kıyafet listesi başlığı ve kıyafetler (Sadece hava durumu başarıyla yüklendiyse göster)
-        if (weatherResult.value is NetworkResponse.Success) {
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Hava durumu detayları
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    text = "Recommended Clothes",
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(10.dp),
-                    textAlign = TextAlign.Center
-                )
+                when (val result = weatherResult.value) {
+                    is NetworkResponse.Error -> {
+                        Spacer(modifier = Modifier.height(26.dp))
+                        Text(text = "Error: ${result.message}", fontWeight = FontWeight.Bold)
+                    }
+                    is NetworkResponse.Loading -> {
+                        CircularProgressIndicator()
+                    }
+                    is NetworkResponse.Success -> {
+                        WeatherDetails(data = result.data, weatherViewModel, clothesViewModel)
+                    }
+                    null -> {}
+                }
             }
 
-            // Kıyafet listesi
-            items(clothesList) { clothes ->
-                ClothesCard(clothes = clothes) {
-                    selectedClothes = clothes // Seçilen kıyafeti belirle
-                    isBottomSheetVisible = true // BottomSheet'i göster
+            // Kıyafet listesi başlığı ve kıyafetler
+            if (weatherResult.value is NetworkResponse.Success) {
+                item(span = { GridItemSpan(maxCurrentLineSpan) }) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    // Cinsiyet seçimi için Dropdown
+                    GenderSelectionDropdown(
+                        selectedGender = selectedGender,
+                        onGenderSelected = { clothesViewModel.setGender(it) }
+                    )
+
+                }
+
+                items(clothesList) { clothes ->
+                    ClothesCard(clothes = clothes) {
+                        selectedClothes = clothes // Seçilen kıyafeti belirle
+                        isBottomSheetVisible = true // BottomSheet'i göster
+                    }
                 }
             }
         }
@@ -124,9 +131,70 @@ fun WeatherAndClothesPage(
     if (isBottomSheetVisible && selectedClothes != null) {
         ModalBottomSheet(
             onDismissRequest = { isBottomSheetVisible = false },
-            modifier = Modifier.fillMaxHeight(0.70f) // Ekranın 4/3'ünü kaplasın
+            modifier = Modifier.fillMaxHeight(0.70f)
         ) {
             ClothesDetailsBottomSheet(clothes = selectedClothes!!)
+        }
+    }
+}
+
+@Composable
+fun GenderSelectionDropdown(
+    selectedGender: String,
+    onGenderSelected: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clickable { expanded = true }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = if (selectedGender == "male") Icons.Default.Man else Icons.Default.Woman,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(54.dp)
+                    .padding(end = 8.dp, start = 8.dp),
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = "Gender: ${if (selectedGender == "Male") "Male" else "Female"}",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            Icon(
+                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            DropdownMenuItem(
+                text = { Text("Male") },
+                onClick = {
+                    onGenderSelected("male")
+                    expanded = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text("Female") },
+                onClick = {
+                    onGenderSelected("female")
+                    expanded = false
+                }
+            )
         }
     }
 }
