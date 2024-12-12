@@ -71,11 +71,7 @@ fun WeatherAndClothesPage(
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
-        // Cinsiyet seçimi için Dropdown
-
-
-        Spacer(modifier = Modifier.height(8.dp))
+    Column(modifier = Modifier.fillMaxSize()) {
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
@@ -261,8 +257,7 @@ fun WeatherDetails(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Search Row
