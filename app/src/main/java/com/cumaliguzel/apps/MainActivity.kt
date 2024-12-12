@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.cumaliguzel.apps.screens.BestPage
 import com.cumaliguzel.apps.screens.FavoritesPage
 import com.cumaliguzel.apps.ui.theme.AppsTheme
+import com.cumaliguzel.apps.viewModel.BestClothesViewModel
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
 
@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
 
     private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var clothesViewModel: ClothesViewModel
+    private lateinit var bestClothesViewModel: BestClothesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +44,7 @@ class MainActivity : ComponentActivity() {
     private fun initializeViewModels() {
         weatherViewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
         clothesViewModel = ViewModelProvider(this)[ClothesViewModel::class.java]
+        bestClothesViewModel = ViewModelProvider(this)[BestClothesViewModel::class.java]
     }
 
     @Composable
@@ -50,7 +52,8 @@ class MainActivity : ComponentActivity() {
         AppsTheme {
             MainScreen(
                 weatherViewModel = weatherViewModel,
-                clothesViewModel = clothesViewModel
+                clothesViewModel = clothesViewModel,
+                bestClothesViewModel = bestClothesViewModel
             )
         }
     }
@@ -60,9 +63,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen(
     weatherViewModel: WeatherViewModel,
-    clothesViewModel: ClothesViewModel
+    clothesViewModel: ClothesViewModel,
+    bestClothesViewModel: BestClothesViewModel
 ) {
-    var selectedTab by remember { mutableStateOf(0) } // Aktif sekmeyi takip etmek için
+    var selectedTab by remember { mutableStateOf(0) }
 
     Scaffold(
         bottomBar = {
@@ -73,15 +77,15 @@ fun MainScreen(
         }
     ) { innerPadding ->
 
-        Box(modifier = Modifier.padding(innerPadding) ){
+        Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedTab) {
-            0 -> WeatherAndClothesPage(
-                weatherViewModel = weatherViewModel,
-                clothesViewModel = clothesViewModel
-            )
-            1 -> FavoritesPage()
-            2 -> BestPage()
-        }
+                0 -> WeatherAndClothesPage(
+                    weatherViewModel = weatherViewModel,
+                    clothesViewModel = clothesViewModel
+                )
+                1 -> FavoritesPage()
+                2 -> BestPage(viewModel = bestClothesViewModel)
+            }
         }
     }
 }
@@ -106,7 +110,7 @@ fun BottomNavigationBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
         )
         NavigationBarItem(
             icon = { Icon(imageVector = Icons.Default.Star, contentDescription = "Best") },
-            label = { Text("Profile") },
+            label = { Text("Best") },
             selected = selectedTab == 2,
             onClick = { onTabSelected(2) }
         )
