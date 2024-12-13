@@ -1,6 +1,9 @@
+// MainActivity.kt
 package com.cumaliguzel.apps
 
 import com.cumaliguzel.apps.screens.WeatherAndClothesPage
+import com.cumaliguzel.apps.screens.FavoritesPage
+import com.cumaliguzel.apps.screens.BestPage
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,11 +18,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
-import com.cumaliguzel.apps.screens.BestPage
-import com.cumaliguzel.apps.screens.FavoritesPage
 import com.cumaliguzel.apps.ui.theme.AppsTheme
 import com.cumaliguzel.apps.viewModel.BestClothesViewModel
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
+import com.cumaliguzel.apps.viewModel.ClothesViewModelFactory
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
 
 class MainActivity : ComponentActivity() {
@@ -43,8 +45,11 @@ class MainActivity : ComponentActivity() {
 
     private fun initializeViewModels() {
         weatherViewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
-        clothesViewModel = ViewModelProvider(this)[ClothesViewModel::class.java]
         bestClothesViewModel = ViewModelProvider(this)[BestClothesViewModel::class.java]
+
+        // ViewModelFactory ile ClothesViewModel oluşturuluyor
+        val clothesViewModelFactory = ClothesViewModelFactory(applicationContext)
+        clothesViewModel = ViewModelProvider(this, clothesViewModelFactory)[ClothesViewModel::class.java]
     }
 
     @Composable
@@ -83,7 +88,7 @@ fun MainScreen(
                     weatherViewModel = weatherViewModel,
                     clothesViewModel = clothesViewModel
                 )
-                1 -> FavoritesPage()
+                1 -> FavoritesPage(clothesViewModel = clothesViewModel)
                 2 -> BestPage(viewModel = bestClothesViewModel)
             }
         }

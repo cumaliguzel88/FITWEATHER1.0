@@ -18,6 +18,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.LocationOn
@@ -45,10 +47,10 @@ fun WeatherAndClothesPage(
 ) {
     val weatherResult = weatherViewModel.weatherResult.observeAsState()
     val clothesList by clothesViewModel.clothesList.collectAsStateWithLifecycle(emptyList())
-    val selectedGender by clothesViewModel.gender.collectAsState() // Cinsiyet seçimi için StateFlow
+    val selectedGender by clothesViewModel.gender.collectAsState()
+    val favorites by clothesViewModel.favorites.collectAsState()
     val context = LocalContext.current
 
-    // BottomSheet için state
     var isBottomSheetVisible by remember { mutableStateOf(false) }
     var selectedClothes by remember { mutableStateOf<Clothes?>(null) }
 
@@ -72,14 +74,12 @@ fun WeatherAndClothesPage(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            // Hava durumu detayları
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                 when (val result = weatherResult.value) {
                     is NetworkResponse.Error -> {
@@ -87,7 +87,7 @@ fun WeatherAndClothesPage(
                         Text(text = "Error: ${result.message}", fontWeight = FontWeight.Bold)
                     }
                     is NetworkResponse.Loading -> {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                     }
                     is NetworkResponse.Success -> {
                         WeatherDetails(data = result.data, weatherViewModel, clothesViewModel)
@@ -96,29 +96,30 @@ fun WeatherAndClothesPage(
                 }
             }
 
-            // Kıyafet listesi başlığı ve kıyafetler
             if (weatherResult.value is NetworkResponse.Success) {
                 item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                     Spacer(modifier = Modifier.height(5.dp))
-                    // Cinsiyet seçimi için Dropdown
                     GenderSelectionDropdown(
                         selectedGender = selectedGender,
                         onGenderSelected = { clothesViewModel.setGender(it) }
                     )
-
                 }
 
                 items(clothesList) { clothes ->
-                    ClothesCard(clothes = clothes) {
-                        selectedClothes = clothes // Seçilen kıyafeti belirle
-                        isBottomSheetVisible = true // BottomSheet'i göster
-                    }
+                    ClothesCard(
+                        clothes = clothes,
+                        isFavorite = clothes.isFavorite,
+                        onToggleFavorite = { clothesViewModel.toggleFavorite(clothes) },
+                        onClick = {
+                            selectedClothes = clothes
+                            isBottomSheetVisible = true
+                        }
+                    )
                 }
             }
         }
     }
 
-    // BottomSheet
     if (isBottomSheetVisible && selectedClothes != null) {
         ModalBottomSheet(
             onDismissRequest = { isBottomSheetVisible = false },
@@ -175,14 +176,14 @@ fun GenderSelectionDropdown(
             DropdownMenuItem(
                 text = { Text("Male") },
                 onClick = {
-                    onGenderSelected("male") // lowercase değer döndürüyoruz
+                    onGenderSelected("male")
                     expanded = false
                 }
             )
             DropdownMenuItem(
                 text = { Text("Female") },
                 onClick = {
-                    onGenderSelected("female") // lowercase değer döndürüyoruz
+                    onGenderSelected("female")
                     expanded = false
                 }
             )
@@ -190,32 +191,53 @@ fun GenderSelectionDropdown(
     }
 }
 
-
 @Composable
-fun ClothesCard(clothes: Clothes, onClick: () -> Unit) {
+fun ClothesCard(
+    clothes: Clothes,
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(400.dp)
+            .padding(8.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(Color.White),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
+            // Büyük resim
             AsyncImage(
                 model = clothes.img,
-                contentDescription = "img",
-                modifier = Modifier.size(400.dp)
+                contentDescription = "Image of clothes",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(500.dp) // Resim alanını büyüttük
+                    .align(Alignment.TopCenter) // Ortalıyoruz
             )
-            Spacer(modifier = Modifier.height(8.dp))
+
+            // Favori ikonu sağ üst köşede
+            IconButton(
+                onClick = onToggleFavorite,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+            ) {
+                Icon(
+                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = "Favorite Icon",
+                    tint = if (isFavorite) Color.Red else Color.Gray
+                )
+            }
         }
     }
 }
+
 
 @Composable
 fun ClothesDetailsBottomSheet(clothes: Clothes) {
@@ -227,14 +249,14 @@ fun ClothesDetailsBottomSheet(clothes: Clothes) {
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = "Clothes Details",
+            text = "com.cumaliguzel.apps.data.Clothes Details",
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
         )
         AsyncImage(
             model = clothes.img,
-            contentDescription = "Clothes Image",
+            contentDescription = "com.cumaliguzel.apps.data.Clothes Image",
             modifier = Modifier.fillMaxSize()
         )
     }

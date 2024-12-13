@@ -146,7 +146,7 @@ fun ClothesCards(clothes: Clothes, onClick: () -> Unit) {
         ) {
             AsyncImage(
                 model = clothes.img,
-                contentDescription = "Clothes Image",
+                contentDescription = "com.cumaliguzel.apps.data.Clothes Image",
                 modifier = Modifier.size(500.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -165,14 +165,14 @@ fun ClothesDetailsBottomSheets(clothes: Clothes) {
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = "Clothes Details",
+            text = "com.cumaliguzel.apps.data.Clothes Details",
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
         )
         AsyncImage(
             model = clothes.img,
-            contentDescription = "Clothes Image",
+            contentDescription = "com.cumaliguzel.apps.data.Clothes Image",
             modifier = Modifier.fillMaxSize()
         )
     }

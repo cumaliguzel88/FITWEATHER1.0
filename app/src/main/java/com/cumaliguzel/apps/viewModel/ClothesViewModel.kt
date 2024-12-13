@@ -1,35 +1,54 @@
 package com.cumaliguzel.apps.viewModel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.cumaliguzel.apps.api.WeatherModel
 import com.cumaliguzel.apps.data.Clothes
+import com.cumaliguzel.apps.data.SharedPreferencesHelper
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.toObjects
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class ClothesViewModel : ViewModel() {
+class ClothesViewModel(private val context: Context) : ViewModel() {
 
+    private val sharedPreferencesHelper = SharedPreferencesHelper(context)
+
+    // Clothes list state
     private var _clothesList = MutableStateFlow<List<Clothes>>(emptyList())
     val clothesList = _clothesList.asStateFlow()
 
-    var weatherData: WeatherModel? = null
+    // Favorites state (documentId'lere dayalı favoriler)
+    private var _favorites = MutableStateFlow<List<String>>(sharedPreferencesHelper.getFavorites())
+    val favorites = _favorites.asStateFlow()
 
-    // Cinsiyet seçimi için StateFlow
-    private var _gender = MutableStateFlow("male") // Varsayılan olarak "male"
+    // Weather and gender-related data
+    var weatherData: WeatherModel? = null
+    private var _gender = MutableStateFlow("male") // Default gender
     val gender = _gender.asStateFlow()
 
+    /**
+     * Set the gender and update the clothes list accordingly.
+     */
     fun setGender(selectedGender: String) {
-        _gender.value = selectedGender
-        updateWeatherAndFetchClothes() // Cinsiyet değiştiğinde kıyafet listesini yenile
+        if (_gender.value != selectedGender) {
+            _gender.value = selectedGender
+            updateWeatherAndFetchClothes()
+        }
     }
 
+    /**
+     * Updates the clothes list based on weather and gender.
+     * Ensures `isFavorite` states are preserved.
+     */
     fun updateWeatherAndFetchClothes() {
         val tempC = weatherData?.current?.temp_c
         val gender = _gender.value
         if (tempC != null) {
-            // temp_c'ye ve cinsiyete göre uygun koleksiyonu belirle
             val collectionName = when {
                 tempC < 10 -> if (gender == "male") "menwinter" else "womenwinter"
                 tempC in 10.0..20.0 -> if (gender == "male") "menspring" else "womenspring"
@@ -42,6 +61,9 @@ class ClothesViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Fetches the clothes list from Firebase Firestore and ensures `isFavorite` states are preserved.
+     */
     private fun getClothesList(collectionName: String) {
         val db = Firebase.firestore
         db.collection(collectionName).addSnapshotListener { value, error ->
@@ -50,11 +72,57 @@ class ClothesViewModel : ViewModel() {
                 return@addSnapshotListener
             }
             if (value != null) {
-                _clothesList.value = value.toObjects()
+                val newClothesList = value.documents.map { document ->
+                    val clothes = document.toObject(Clothes::class.java)!!
+                    clothes.copy(
+                        documentId = document.id, // Firestore'dan gelen benzersiz kimlik
+                        isFavorite = _favorites.value.contains(document.id)
+                    )
+                }
+                _clothesList.value = newClothesList
             }
         }
     }
 
+    /**
+     * Toggles the favorite status of a Clothes item.
+     * Updates both the `favorites` state and the `clothesList`.
+     */
+    fun toggleFavorite(clothes: Clothes) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val currentFavorites = _favorites.value.toMutableList()
+
+            if (currentFavorites.contains(clothes.documentId)) {
+                currentFavorites.remove(clothes.documentId)
+            } else {
+                currentFavorites.add(clothes.documentId)
+            }
+
+            _favorites.value = currentFavorites
+            sharedPreferencesHelper.saveFavorites(currentFavorites)
+            updateClothesList(_clothesList.value)
+        }
+    }
+
+    /**
+     * Checks if a given Clothes item is in the list of favorites.
+     */
+    fun isFavorite(clothes: Clothes): Boolean {
+        return _favorites.value.contains(clothes.documentId)
+    }
+
+    /**
+     * Updates the clothes list and ensures `isFavorite` states are synchronized.
+     */
+    fun updateClothesList(newClothes: List<Clothes>) {
+        _clothesList.value = newClothes.map { clothes ->
+            clothes.copy(isFavorite = _favorites.value.contains(clothes.documentId))
+        }
+    }
+
+    /**
+     * Updates weather data and refreshes the clothes list.
+     */
     fun fetchAndUpdateClothes(weatherModel: WeatherModel) {
         weatherData = weatherModel
         updateWeatherAndFetchClothes()
