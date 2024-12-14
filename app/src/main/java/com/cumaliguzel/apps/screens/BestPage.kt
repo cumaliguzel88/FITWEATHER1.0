@@ -164,12 +164,6 @@ fun ClothesDetailsBottomSheets(clothes: Clothes) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(
-            text = "com.cumaliguzel.apps.data.Clothes Details",
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
         AsyncImage(
             model = clothes.img,
             contentDescription = "com.cumaliguzel.apps.data.Clothes Image",
