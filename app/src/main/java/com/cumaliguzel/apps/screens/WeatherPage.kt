@@ -48,7 +48,6 @@ fun WeatherAndClothesPage(
     val weatherResult = weatherViewModel.weatherResult.observeAsState()
     val clothesList by clothesViewModel.clothesList.collectAsStateWithLifecycle(emptyList())
     val selectedGender by clothesViewModel.gender.collectAsState()
-    val favorites by clothesViewModel.favorites.collectAsState()
     val context = LocalContext.current
 
     var isBottomSheetVisible by remember { mutableStateOf(false) }
@@ -123,12 +122,16 @@ fun WeatherAndClothesPage(
     if (isBottomSheetVisible && selectedClothes != null) {
         ModalBottomSheet(
             onDismissRequest = { isBottomSheetVisible = false },
-            modifier = Modifier.fillMaxHeight(0.70f)
+            modifier = Modifier.fillMaxHeight(0.95f)
         ) {
-            ClothesDetailsBottomSheet(clothes = selectedClothes!!)
+            ClothesDetailsBottomSheet(
+                clothes = selectedClothes!!,
+                clothesViewModel = clothesViewModel
+            )
         }
     }
 }
+
 
 @Composable
 fun GenderSelectionDropdown(
@@ -238,9 +241,8 @@ fun ClothesCard(
     }
 }
 
-
 @Composable
-fun ClothesDetailsBottomSheet(clothes: Clothes) {
+fun ClothesDetailsBottomSheet(clothes: Clothes, clothesViewModel: ClothesViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -248,13 +250,51 @@ fun ClothesDetailsBottomSheet(clothes: Clothes) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        // TextButton'lar (Altta)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            // Top Link TextButton
+            TextButton(
+                onClick = { clothesViewModel.openTopLink(clothes.topLink) }
+            ) {
+                Text(text = "👕 View Top Link", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiary, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            // Bottom Link TextButton
+            TextButton(
+                onClick = { clothesViewModel.openBottomLink(clothes.bottomLink) }
+            ) {
+                Text(text = "👖 View Bottom Link", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiary,fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            }
+        }
+        Spacer(modifier = Modifier.height(5.dp))
+
+
+
+
+        // Kıyafet Görseli (Üstte)
         AsyncImage(
             model = clothes.img,
-            contentDescription = "com.cumaliguzel.apps.data.Clothes Image",
-            modifier = Modifier.fillMaxSize()
+            contentDescription = "Clothes Image",
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f) // Görsel alanı daha esnek hale getirildi
         )
+
+
+
     }
 }
+
+
+
+
 
 @Composable
 fun WeatherDetails(

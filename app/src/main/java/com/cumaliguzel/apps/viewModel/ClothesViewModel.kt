@@ -1,6 +1,8 @@
 package com.cumaliguzel.apps.viewModel
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cumaliguzel.apps.api.WeatherModel
@@ -101,6 +103,7 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
             updateClothesList(_clothesList.value)
         }
     }
+
     /**
      * Updates the clothes list and ensures `isFavorite` states are synchronized.
      */
@@ -116,5 +119,27 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
     fun fetchAndUpdateClothes(weatherModel: WeatherModel) {
         weatherData = weatherModel
         updateWeatherAndFetchClothes()
+    }
+
+    /**
+     * Opens the top link in a browser.
+     */
+    fun openTopLink(topLink: String) {
+        if (topLink.isNotEmpty()) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(topLink))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
+    }
+
+    /**
+     * Opens the bottom link in a browser.
+     */
+    fun openBottomLink(bottomLink: String) {
+        if (bottomLink.isNotEmpty()) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(bottomLink))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
     }
 }
