@@ -258,19 +258,23 @@ fun ClothesDetailsBottomSheet(clothes: Clothes, clothesViewModel: ClothesViewMod
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             // Top Link TextButton
-            TextButton(
-                onClick = { clothesViewModel.openTopLink(clothes.topLink) }
-            ) {
-                Text(text = "👕 View Top Link", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiary, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            Button(
+                onClick = { clothesViewModel.openTopLink(clothes.topLink)
+                },
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onTertiary)
+            )
+            {
+                Text(text = "👕 Top Link", style = MaterialTheme.typography.bodyMedium,  fontWeight = FontWeight.Bold, fontSize = 14.sp)
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
             // Bottom Link TextButton
-            TextButton(
-                onClick = { clothesViewModel.openBottomLink(clothes.bottomLink) }
+            Button(
+                onClick = { clothesViewModel.openBottomLink(clothes.bottomLink) },
+                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onTertiary)
             ) {
-                Text(text = "👖 View Bottom Link", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onTertiary,fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                Text(text = "👖 Bottom Link", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, fontSize = 14.sp)
             }
         }
         Spacer(modifier = Modifier.height(5.dp))
