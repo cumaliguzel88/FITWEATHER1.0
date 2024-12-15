@@ -22,8 +22,8 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
     private var _clothesList = MutableStateFlow<List<Clothes>>(emptyList())
     val clothesList = _clothesList.asStateFlow()
 
-    // Favorites state (documentId'lere dayalı favoriler)
-    private var _favorites = MutableStateFlow<List<String>>(sharedPreferencesHelper.getFavorites())
+    // Favorites state (id tabanlı favoriler)
+    private var _favorites = MutableStateFlow<List<Int>>(sharedPreferencesHelper.getFavorites())
     val favorites = _favorites.asStateFlow()
 
     // Weather and gender-related data
@@ -72,11 +72,9 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
                 return@addSnapshotListener
             }
             if (value != null) {
-                val newClothesList = value.documents.map { document ->
-                    val clothes = document.toObject(Clothes::class.java)!!
+                val newClothesList = value.toObjects<Clothes>().map { clothes ->
                     clothes.copy(
-                        documentId = document.id, // Firestore'dan gelen benzersiz kimlik
-                        isFavorite = _favorites.value.contains(document.id)
+                        isFavorite = _favorites.value.contains(clothes.id)
                     )
                 }
                 _clothesList.value = newClothesList
@@ -92,10 +90,10 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val currentFavorites = _favorites.value.toMutableList()
 
-            if (currentFavorites.contains(clothes.documentId)) {
-                currentFavorites.remove(clothes.documentId)
+            if (currentFavorites.contains(clothes.id)) {
+                currentFavorites.remove(clothes.id)
             } else {
-                currentFavorites.add(clothes.documentId)
+                currentFavorites.add(clothes.id)
             }
 
             _favorites.value = currentFavorites
@@ -108,7 +106,7 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
      * Checks if a given Clothes item is in the list of favorites.
      */
     fun isFavorite(clothes: Clothes): Boolean {
-        return _favorites.value.contains(clothes.documentId)
+        return _favorites.value.contains(clothes.id)
     }
 
     /**
@@ -116,7 +114,7 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
      */
     fun updateClothesList(newClothes: List<Clothes>) {
         _clothesList.value = newClothes.map { clothes ->
-            clothes.copy(isFavorite = _favorites.value.contains(clothes.documentId))
+            clothes.copy(isFavorite = _favorites.value.contains(clothes.id))
         }
     }
 

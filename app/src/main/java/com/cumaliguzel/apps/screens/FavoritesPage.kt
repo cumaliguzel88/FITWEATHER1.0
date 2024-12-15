@@ -27,7 +27,7 @@ fun FavoritesPage(clothesViewModel: ClothesViewModel) {
     // Favori kıyafetleri `clothesList` ile eşleştir
     // Favori kıyafetleri `clothesList` ile eşleştir
     val favoriteClothes = clothesList.filter { clothes ->
-        favoriteKeys.value.contains(clothes.documentId) // documentId kullanılıyor
+        favoriteKeys.value.contains(clothes.id) // documentId kullanılıyor
     }
 
 
