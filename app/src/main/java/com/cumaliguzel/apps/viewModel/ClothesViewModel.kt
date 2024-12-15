@@ -101,14 +101,6 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
             updateClothesList(_clothesList.value)
         }
     }
-
-    /**
-     * Checks if a given Clothes item is in the list of favorites.
-     */
-    fun isFavorite(clothes: Clothes): Boolean {
-        return _favorites.value.contains(clothes.id)
-    }
-
     /**
      * Updates the clothes list and ensures `isFavorite` states are synchronized.
      */

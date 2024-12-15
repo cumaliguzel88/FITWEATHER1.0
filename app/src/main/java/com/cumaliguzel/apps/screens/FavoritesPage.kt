@@ -93,18 +93,11 @@ fun ClothesDetailsBottomSheetss(clothes: Clothes) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(
-            text = "Clothes Details",
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
         AsyncImage(
             model = clothes.img,
             contentDescription = "Clothes Image",
             modifier = Modifier
                 .fillMaxSize()
-                .aspectRatio(1f)
         )
 
 
