@@ -82,7 +82,9 @@ dependencies {
     implementation ("com.google.firebase:firebase-storage:21.0.1")
     //pref
     implementation("androidx.datastore:datastore-preferences:1.1.1")
-
-
-
+    //navigtion
+    implementation("androidx.navigation:navigation-compose:2.8.5")
 }
+
+
+

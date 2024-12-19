@@ -142,4 +142,9 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
             context.startActivity(intent)
         }
     }
+    fun getClothesById(clothesId: Int): Clothes? {
+        return _clothesList.value.find { it.id == clothesId }
+    }
+
+
 }

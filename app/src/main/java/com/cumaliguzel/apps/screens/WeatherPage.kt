@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.cumaliguzel.apps.api.NetworkResponse
 import com.cumaliguzel.apps.api.WeatherModel
@@ -43,15 +44,13 @@ import com.cumaliguzel.apps.viewModel.WeatherViewModel
 @Composable
 fun WeatherAndClothesPage(
     weatherViewModel: WeatherViewModel,
-    clothesViewModel: ClothesViewModel
+    clothesViewModel: ClothesViewModel,
+    navController: NavController // NavController ekleniyor
 ) {
     val weatherResult = weatherViewModel.weatherResult.observeAsState()
     val clothesList by clothesViewModel.clothesList.collectAsStateWithLifecycle(emptyList())
     val selectedGender by clothesViewModel.gender.collectAsState()
     val context = LocalContext.current
-
-    var isBottomSheetVisible by remember { mutableStateOf(false) }
-    var selectedClothes by remember { mutableStateOf<Clothes?>(null) }
 
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -110,27 +109,15 @@ fun WeatherAndClothesPage(
                         isFavorite = clothes.isFavorite,
                         onToggleFavorite = { clothesViewModel.toggleFavorite(clothes) },
                         onClick = {
-                            selectedClothes = clothes
-                            isBottomSheetVisible = true
+                            navController.navigate("detail_screen/${clothes.id}") // Kart tıklanınca DetailScreen'e geçiş
                         }
                     )
                 }
             }
         }
     }
-
-    if (isBottomSheetVisible && selectedClothes != null) {
-        ModalBottomSheet(
-            onDismissRequest = { isBottomSheetVisible = false },
-            modifier = Modifier.fillMaxHeight(0.95f)
-        ) {
-            ClothesDetailsBottomSheet(
-                clothes = selectedClothes!!,
-                clothesViewModel = clothesViewModel
-            )
-        }
-    }
 }
+
 
 
 @Composable
@@ -141,11 +128,13 @@ fun GenderSelectionDropdown(
     var expanded by remember { mutableStateOf(false) }
 
     Box(
+
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .clickable { expanded = true }
-    ) {
+    )
+    {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -158,7 +147,7 @@ fun GenderSelectionDropdown(
                 modifier = Modifier
                     .size(44.dp)
                     .padding(end = 8.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.onTertiary
             )
             Text(
                 text = "Gender: ${if (selectedGender == "male") "Male" else "Female"}",
@@ -169,7 +158,7 @@ fun GenderSelectionDropdown(
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
         DropdownMenu(
@@ -241,63 +230,6 @@ fun ClothesCard(
     }
 }
 
-@Composable
-fun ClothesDetailsBottomSheet(clothes: Clothes, clothesViewModel: ClothesViewModel) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        // TextButton'lar (Altta)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            // Top Link TextButton
-            Button(
-                onClick = { clothesViewModel.openTopLink(clothes.topLink)
-                },
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onTertiary)
-            )
-            {
-                Text(text = "👕 Top Link", style = MaterialTheme.typography.bodyMedium,  fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            // Bottom Link TextButton
-            Button(
-                onClick = { clothesViewModel.openBottomLink(clothes.bottomLink) },
-                colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onTertiary)
-            ) {
-                Text(text = "👖 Bottom Link", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-            }
-        }
-        Spacer(modifier = Modifier.height(5.dp))
-
-
-
-
-        // Kıyafet Görseli (Üstte)
-        AsyncImage(
-            model = clothes.img,
-            contentDescription = "Clothes Image",
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f) // Görsel alanı daha esnek hale getirildi
-        )
-
-
-
-    }
-}
-
-
-
 
 
 @Composable
@@ -341,7 +273,7 @@ fun WeatherDetails(
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "Search for any location",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.onTertiary
                 )
             }
         }
@@ -354,7 +286,7 @@ fun WeatherDetails(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = "Location Icon",
                 modifier = Modifier.size(30.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.onTertiary
             )
             Text(text = data.location.name, fontSize = 20.sp)
             Spacer(modifier = Modifier.width(8.dp))
@@ -389,7 +321,7 @@ fun WeatherDetails(
                 .padding(start = 30.dp, end = 30.dp)
                 .animateContentSize(),
             shape = RoundedCornerShape(10.dp),
-            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary),
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onTertiary),
             elevation = CardDefaults.cardElevation(8.dp)
         ) {
             Row(

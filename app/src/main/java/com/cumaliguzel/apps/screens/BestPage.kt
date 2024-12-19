@@ -92,7 +92,7 @@ fun GenderSelectionDropdowns(
                 modifier = Modifier
                     .size(44.dp)
                     .padding(end = 8.dp),
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.onTertiary
             )
             Text(
                 text = "Gender: ${if (selectedGender == "male") "Male" else "Female"}",
@@ -103,7 +103,7 @@ fun GenderSelectionDropdowns(
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.onSecondary
             )
         }
         DropdownMenu(
