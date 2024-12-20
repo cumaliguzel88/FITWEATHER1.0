@@ -52,9 +52,9 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
         val gender = _gender.value
         if (tempC != null) {
             val collectionName = when {
-                tempC < 10 -> if (gender == "male") "menwinter" else "womenwinter"
-                tempC in 10.0..20.0 -> if (gender == "male") "menspring" else "womenspring"
-                tempC > 20 -> if (gender == "male") "mensummer" else "womensummer"
+                tempC < 15 -> if (gender == "male") "menwinter" else "womenwinter"
+                tempC in 15.0..22.0 -> if (gender == "male") "menspring" else "womenspring"
+                tempC > 22 -> if (gender == "male") "mensummer" else "womensummer"
                 else -> if (gender == "male") "menwinter" else "womenwinter"
             }
             getClothesList(collectionName)
@@ -62,6 +62,7 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
             println("Hava durumu bilgisi yok.")
         }
     }
+
 
     /**
      * Fetches the clothes list from Firebase Firestore and ensures `isFavorite` states are preserved.
