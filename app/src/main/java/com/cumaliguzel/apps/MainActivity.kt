@@ -35,12 +35,14 @@ import com.cumaliguzel.apps.viewModel.BestClothesViewModel
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.ClothesViewModelFactory
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
+import com.cumaliguzel.apps.viewModel.CommentsViewModel
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var clothesViewModel: ClothesViewModel
     private lateinit var bestClothesViewModel: BestClothesViewModel
+    private lateinit var commentsViewModel: CommentsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +64,9 @@ class MainActivity : ComponentActivity() {
         // ViewModelFactory ile ClothesViewModel oluşturuluyor
         val clothesViewModelFactory = ClothesViewModelFactory(applicationContext)
         clothesViewModel = ViewModelProvider(this, clothesViewModelFactory)[ClothesViewModel::class.java]
+
+        // CommentsViewModel oluşturuluyor
+        commentsViewModel = ViewModelProvider(this)[CommentsViewModel::class.java]
     }
 
     @Composable
@@ -70,7 +75,8 @@ class MainActivity : ComponentActivity() {
             MainScreen(
                 weatherViewModel = weatherViewModel,
                 clothesViewModel = clothesViewModel,
-                bestClothesViewModel = bestClothesViewModel
+                bestClothesViewModel = bestClothesViewModel,
+                commentsViewModel = commentsViewModel
             )
         }
     }
@@ -81,7 +87,8 @@ class MainActivity : ComponentActivity() {
 fun MainScreen(
     weatherViewModel: WeatherViewModel,
     clothesViewModel: ClothesViewModel,
-    bestClothesViewModel: BestClothesViewModel
+    bestClothesViewModel: BestClothesViewModel,
+    commentsViewModel: CommentsViewModel
 ) {
     val navController = rememberNavController() // NavController oluşturuluyor
 
@@ -126,6 +133,7 @@ fun MainScreen(
                 if (clothes != null) {
                     DetailScreen(
                         clothesViewModel = clothesViewModel,
+                        commentsViewModel = commentsViewModel,
                         clothes = clothes,
                         navController = navController
                     )
