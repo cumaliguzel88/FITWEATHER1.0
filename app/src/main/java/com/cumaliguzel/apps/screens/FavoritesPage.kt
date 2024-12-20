@@ -1,20 +1,22 @@
 package com.cumaliguzel.apps.screens
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
+import com.cumaliguzel.apps.components.ClothesCard
+import com.cumaliguzel.apps.components.ClothesDetailsBottomSheet
+import com.cumaliguzel.apps.components.EmptyFavoritesView
 import com.cumaliguzel.apps.data.Clothes
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,11 +27,9 @@ fun FavoritesPage(clothesViewModel: ClothesViewModel) {
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     // Favori kıyafetleri `clothesList` ile eşleştir
-    // Favori kıyafetleri `clothesList` ile eşleştir
     val favoriteClothes = clothesList.filter { clothes ->
-        favoriteKeys.value.contains(clothes.id) // documentId kullanılıyor
+        favoriteKeys.value.contains(clothes.id)
     }
-
 
     if (favoriteClothes.isEmpty()) {
         EmptyFavoritesView()
@@ -63,43 +63,7 @@ fun FavoritesPage(clothesViewModel: ClothesViewModel) {
             onDismissRequest = { isBottomSheetVisible = false },
             modifier = Modifier.fillMaxHeight(0.8f)
         ) {
-            ClothesDetailsBottomSheetss(clothes = selectedClothes!!)
+            ClothesDetailsBottomSheet(clothes = selectedClothes!!)
         }
-    }
-}
-
-@Composable
-fun EmptyFavoritesView() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "No favorites yet!",
-            style = MaterialTheme.typography.titleMedium,
-            color = Color.Gray
-        )
-    }
-}
-
-@Composable
-fun ClothesDetailsBottomSheetss(clothes: Clothes) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        AsyncImage(
-            model = clothes.img,
-            contentDescription = "Clothes Image",
-            modifier = Modifier
-                .fillMaxSize()
-        )
-
-
     }
 }

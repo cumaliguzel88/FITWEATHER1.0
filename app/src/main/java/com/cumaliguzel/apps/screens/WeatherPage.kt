@@ -36,6 +36,9 @@ import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.cumaliguzel.apps.api.NetworkResponse
 import com.cumaliguzel.apps.api.WeatherModel
+import com.cumaliguzel.apps.components.ClothesCard
+import com.cumaliguzel.apps.components.GenderSelectionDropdown
+import com.cumaliguzel.apps.components.WeatherDetails
 import com.cumaliguzel.apps.data.Clothes
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
@@ -45,9 +48,9 @@ import com.cumaliguzel.apps.viewModel.WeatherViewModel
 fun WeatherAndClothesPage(
     weatherViewModel: WeatherViewModel,
     clothesViewModel: ClothesViewModel,
-    navController: NavController // NavController ekleniyor
+    navController: NavController
 ) {
-    val weatherResult = weatherViewModel.weatherResult.observeAsState()
+    val weatherResult by weatherViewModel.weatherResult.observeAsState()
     val clothesList by clothesViewModel.clothesList.collectAsStateWithLifecycle(emptyList())
     val selectedGender by clothesViewModel.gender.collectAsState()
     val context = LocalContext.current
@@ -79,22 +82,30 @@ fun WeatherAndClothesPage(
             modifier = Modifier.fillMaxSize()
         ) {
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-                when (val result = weatherResult.value) {
+                when (val result = weatherResult) {
                     is NetworkResponse.Error -> {
-                        Spacer(modifier = Modifier.height(26.dp))
-                        Text(text = "Error: ${result.message}", fontWeight = FontWeight.Bold)
+                        Text(
+                            text = "Error: ${result.message}",
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
                     }
                     is NetworkResponse.Loading -> {
                         CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                     }
                     is NetworkResponse.Success -> {
-                        WeatherDetails(data = result.data, weatherViewModel, clothesViewModel)
+                        WeatherDetails(
+                            data = result.data,
+                            weatherViewModel = weatherViewModel,
+                            clothesViewModel = clothesViewModel
+                        )
                     }
                     null -> {}
                 }
             }
 
-            if (weatherResult.value is NetworkResponse.Success) {
+            if (weatherResult is NetworkResponse.Success) {
                 item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                     Spacer(modifier = Modifier.height(5.dp))
                     GenderSelectionDropdown(
@@ -109,278 +120,11 @@ fun WeatherAndClothesPage(
                         isFavorite = clothes.isFavorite,
                         onToggleFavorite = { clothesViewModel.toggleFavorite(clothes) },
                         onClick = {
-                            navController.navigate("detail_screen/${clothes.id}") // Kart tıklanınca DetailScreen'e geçiş
+                            navController.navigate("detail_screen/${clothes.id}")
                         }
                     )
                 }
             }
         }
-    }
-}
-
-
-
-@Composable
-fun GenderSelectionDropdown(
-    selectedGender: String,
-    onGenderSelected: (String) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(
-
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clickable { expanded = true }
-    )
-    {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = if (selectedGender == "male") Icons.Default.Man else Icons.Default.Woman,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(44.dp)
-                    .padding(end = 8.dp),
-                tint = MaterialTheme.colorScheme.onTertiary
-            )
-            Text(
-                text = "Gender: ${if (selectedGender == "male") "Male" else "Female"}",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-            Icon(
-                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSecondary
-            )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = { Text("Male") },
-                onClick = {
-                    onGenderSelected("male")
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Female") },
-                onClick = {
-                    onGenderSelected("female")
-                    expanded = false
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun ClothesCard(
-    clothes: Clothes,
-    isFavorite: Boolean,
-    onToggleFavorite: () -> Unit,
-    onClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(400.dp)
-            .padding(8.dp)
-            .clickable { onClick() },
-        shape = RoundedCornerShape(10.dp),
-        colors = CardDefaults.cardColors(Color.White),
-        elevation = CardDefaults.cardElevation(8.dp)
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            // Büyük resim
-            AsyncImage(
-                model = clothes.img,
-                contentDescription = "Image of clothes",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp) // Resim alanını büyüttük
-                    .align(Alignment.TopCenter) // Ortalıyoruz
-            )
-
-            // Favori ikonu sağ üst köşede
-            IconButton(
-                onClick = onToggleFavorite,
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .padding(8.dp)
-            ) {
-                Icon(
-                    imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = "Favorite Icon",
-                    tint = if (isFavorite) Color.Red else Color.Gray
-                )
-            }
-        }
-    }
-}
-
-
-
-@Composable
-fun WeatherDetails(
-    data: WeatherModel,
-    weatherViewModel: WeatherViewModel,
-    clothesViewModel: ClothesViewModel
-) {
-    var isExpanded by remember { mutableStateOf(false) }
-    var cityName by remember { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    // Hava durumu güncellendiğinde kıyafetleri değiştir
-    LaunchedEffect(data.current.temp_c) {
-        clothesViewModel.fetchAndUpdateClothes(data) // Hava durumu verisini ClothesViewModel'e gönder
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // Search Row
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(
-                modifier = Modifier.weight(1f),
-                value = cityName,
-                onValueChange = { cityName = it },
-                label = { Text("Search for any location: ") }
-            )
-            IconButton(onClick = {
-                weatherViewModel.getData(cityName)
-                keyboardController?.hide()
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search for any location",
-                    tint = MaterialTheme.colorScheme.onTertiary
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            Icon(
-                imageVector = Icons.Default.LocationOn,
-                contentDescription = "Location Icon",
-                modifier = Modifier.size(30.dp),
-                tint = MaterialTheme.colorScheme.onTertiary
-            )
-            Text(text = data.location.name, fontSize = 20.sp)
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(text = data.location.country, fontSize = 10.sp, color = Color.Gray)
-        }
-        Text(
-            text = "${data.current.temp_c} ° C",
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-
-        AsyncImage(
-            modifier = Modifier.size(50.dp),
-            model = "https:${data.current.condition.icon}",
-            contentDescription = "Weather Icon"
-        )
-
-        Text(
-            text = data.current.condition.text,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            color = Color.Gray
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        ElevatedCard(
-            modifier = Modifier
-                .padding(start = 30.dp, end = 30.dp)
-                .animateContentSize(),
-            shape = RoundedCornerShape(10.dp),
-            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onTertiary),
-            elevation = CardDefaults.cardElevation(8.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                IconButton(onClick = { isExpanded = !isExpanded }) {
-                    Icon(
-                        imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        contentDescription = "Toggle Details"
-                    )
-                }
-
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround,
-                    ) {
-                        WeatherKeyValue(key = "Humidity", value = "${data.current.humidity}%")
-                        WeatherKeyValue(key = "Feels Like", value = "${data.current.feelslike_c}° C")
-                    }
-                    if (isExpanded) {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceAround,
-                        ) {
-                            WeatherKeyValue(key = "Wind Speed", value = "${data.current.wind_kph} km/h")
-                            WeatherKeyValue(key = "Precipitation", value = "${data.current.precip_mm} mm")
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceAround,
-                        ) {
-                            WeatherKeyValue(
-                                key = "Local Time",
-                                value = data.location.localtime.split(' ')[1]
-                            )
-                            WeatherKeyValue(
-                                key = "Local Date",
-                                value = data.location.localtime.split(' ')[0]
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-fun WeatherKeyValue(key: String, value: String) {
-    Column(
-        modifier = Modifier.padding(5.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = key, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onPrimary, fontSize = 12.sp)
-        Text(text = value, fontWeight = FontWeight.Bold, fontSize = 12.sp)
     }
 }
