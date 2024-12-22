@@ -66,7 +66,7 @@ fun WeatherAndClothesPage(
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                 when (val result = weatherResult) {
                     is NetworkResponse.Error -> {
-                      LottieAnimationComposable(animationResId = R.raw.eror_animation,Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
+                      LottieAnimationComposable(animationResId = R.raw.lottie_eror_animation,Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
                     }
                     is NetworkResponse.Loading -> {
                         LottieAnimationComposable(animationResId = R.raw.animation_loading,Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
