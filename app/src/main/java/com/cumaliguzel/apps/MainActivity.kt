@@ -22,6 +22,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavType
@@ -34,6 +35,7 @@ import com.cumaliguzel.apps.onboarding.OnboardingScreen
 import com.cumaliguzel.apps.screens.*
 import com.cumaliguzel.apps.ui.theme.AppsTheme
 import com.cumaliguzel.apps.viewModel.*
+import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
 
 class MainActivity : ComponentActivity() {
 
@@ -180,15 +182,16 @@ fun AuthNavigation(authViewModel: AuthViewModel) {
 @Composable
 fun LoadingScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
+       LottieAnimationComposable(animationResId = R.raw.lottie_eror_animation, modifier = Modifier.align(
+           Alignment.Center))
     }
 }
 
 @Composable
 fun BottomNavigationBar(selectedTab: Int?, onTabSelected: (Int) -> Unit) {
     NavigationBar(
-        containerColor = MaterialTheme.colorScheme.onTertiary,
-        contentColor = MaterialTheme.colorScheme.primary,
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.secondary,
         tonalElevation = 5.dp,
         modifier = Modifier
             .fillMaxWidth()
@@ -197,20 +200,20 @@ fun BottomNavigationBar(selectedTab: Int?, onTabSelected: (Int) -> Unit) {
             .background(MaterialTheme.colorScheme.onTertiary)
     ) {
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home", tint = MaterialTheme.colorScheme.onSecondary) },
-            label = { Text("Home") },
+            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home", tint = MaterialTheme.colorScheme.background) },
+            label = { Text("Home", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold) },
             selected = selectedTab == 0,
             onClick = { onTabSelected(0) }
         )
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorites", tint = MaterialTheme.colorScheme.onSecondary) },
-            label = { Text("Favorites") },
+            icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorites", tint = MaterialTheme.colorScheme.background) },
+            label = { Text("Favorites", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold) },
             selected = selectedTab == 1,
             onClick = { onTabSelected(1) }
         )
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Star, contentDescription = "Best", tint = MaterialTheme.colorScheme.onSecondary) },
-            label = { Text("Best") },
+            icon = { Icon(imageVector = Icons.Default.Star, contentDescription = "Best", tint = MaterialTheme.colorScheme.background) },
+            label = { Text("Best", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold) },
             selected = selectedTab == 2,
             onClick = { onTabSelected(2) }
         )

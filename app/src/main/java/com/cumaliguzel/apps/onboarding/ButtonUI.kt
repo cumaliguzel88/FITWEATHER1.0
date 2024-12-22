@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ButtonUI(
     text: String = "Next",
-    backgroundColor: Color = MaterialTheme.colorScheme.onTertiary,
-    textColor: Color = MaterialTheme.colorScheme.onSecondary,
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
+    textColor: Color = MaterialTheme.colorScheme.background,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     fontSize: Int = 14,
     onClick: () -> Unit,
@@ -26,7 +26,7 @@ fun ButtonUI(
     //button
     Button(
         onClick = onClick, colors = ButtonDefaults.buttonColors(
-            MaterialTheme.colorScheme.onTertiary
+            MaterialTheme.colorScheme.primary
         ), shape = RoundedCornerShape(10.dp)
     ) {
         Text(

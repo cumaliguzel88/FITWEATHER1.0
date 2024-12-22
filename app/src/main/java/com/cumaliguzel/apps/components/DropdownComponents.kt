@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Woman
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -22,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -45,10 +47,11 @@ fun GenderSelectionDropdown(
         ) {
             Icon(
                 imageVector = if (selectedGender == "male") Icons.Default.Man else Icons.Default.Woman,
+                tint = MaterialTheme.colorScheme.primary,
                 contentDescription = null,
                 modifier = Modifier.padding(end = 8.dp)
             )
-            Text(text = "Gender: ${if (selectedGender == "male") "Male" else "Female"}")
+            Text(text = "Gender: ${if (selectedGender == "male") "Male" else "Female"}", fontWeight = FontWeight.Bold)
             Icon(
                 imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                 contentDescription = null
@@ -59,14 +62,14 @@ fun GenderSelectionDropdown(
             onDismissRequest = { expanded = false }
         ) {
             DropdownMenuItem(
-                text = { Text("Male") },
+                text = { Text("Male", fontWeight = FontWeight.Bold) },
                 onClick = {
                     onGenderSelected("male")
                     expanded = false
                 }
             )
             DropdownMenuItem(
-                text = { Text("Female") },
+                text = { Text("Female", fontWeight = FontWeight.Bold) },
                 onClick = {
                     onGenderSelected("female")
                     expanded = false

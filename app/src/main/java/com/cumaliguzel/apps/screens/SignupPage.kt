@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -64,14 +67,17 @@ fun SignupPage(modifier: Modifier = Modifier,navController: NavController,authVi
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(36.dp))
+        Icon(
+            imageVector = Icons.Default.LockOpen,
+            contentDescription ="lock icon",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(120.dp)
+        )
+        Spacer(modifier = Modifier.height(26.dp))
 
-        LottieAnimationComposable(animationResId = R.raw.signup_animation,modifier = Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         Text("Create an Account to Get Started", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
 

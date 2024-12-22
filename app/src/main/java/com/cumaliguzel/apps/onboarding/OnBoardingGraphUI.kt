@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,7 +43,8 @@ fun OnBoardingGraphUI(onBoardingModel: OnBoardingModel) {
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onBackground
+            fontWeight = FontWeight.Bold
+
         )
         Spacer(modifier = Modifier.fillMaxWidth().size(15.dp))
 
@@ -55,7 +57,8 @@ fun OnBoardingGraphUI(onBoardingModel: OnBoardingModel) {
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface,
+
+
         )
         Spacer(modifier = Modifier.fillMaxWidth().size(5.dp))
     }

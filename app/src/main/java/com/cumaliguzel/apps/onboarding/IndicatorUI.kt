@@ -22,8 +22,8 @@ fun IndicatorUI(
     //we define the parameters of the indicator :)
     pageSize : Int, //4
     currentPage : Int, //current index like flutter
-    selectedColor : Color = MaterialTheme.colorScheme.onTertiary,
-    unselectedColor : Color = MaterialTheme.colorScheme.onSecondary,
+    selectedColor : Color = MaterialTheme.colorScheme.primary,
+    unselectedColor : Color = MaterialTheme.colorScheme.secondary,
 ) {
     //we want to show the indicator in a row
     Row(

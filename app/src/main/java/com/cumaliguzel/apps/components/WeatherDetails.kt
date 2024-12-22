@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.LocationCity
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CardDefaults
@@ -75,7 +76,15 @@ fun WeatherDetails(
                 modifier = Modifier.weight(1f),
                 value = cityName,
                 onValueChange = { cityName = it },
-                label = { Text("Search for any location: ") }
+                label = { Text("Search for any location: ") },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.LocationCity,
+                        contentDescription = "Location Icon",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+
             )
             IconButton(onClick = {
                 weatherViewModel.getData(cityName)
@@ -84,7 +93,7 @@ fun WeatherDetails(
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "Search for any location",
-                    tint = MaterialTheme.colorScheme.onTertiary
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -97,9 +106,9 @@ fun WeatherDetails(
                 imageVector = Icons.Default.LocationOn,
                 contentDescription = "Location Icon",
                 modifier = Modifier.size(30.dp),
-                tint = MaterialTheme.colorScheme.onTertiary
+                tint = MaterialTheme.colorScheme.primary
             )
-            Text(text = data.location.name, fontSize = 20.sp)
+            Text(text = data.location.name, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = data.location.country, fontSize = 10.sp, color = Color.Gray)
         }
@@ -132,7 +141,7 @@ fun WeatherDetails(
                 .padding(start = 30.dp, end = 30.dp)
                 .animateContentSize(),
             shape = RoundedCornerShape(10.dp),
-            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.onTertiary),
+            colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primary),
             elevation = CardDefaults.cardElevation(8.dp)
         ) {
             Row(

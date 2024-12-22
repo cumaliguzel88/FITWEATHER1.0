@@ -8,6 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -65,14 +66,18 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-       LottieAnimationComposable(animationResId = R.raw.signup_animation,
-           modifier = Modifier.fillMaxSize().align(Alignment.CenterHorizontally)
-           )
 
-        Spacer(modifier = Modifier.height(16.dp))
+         Icon(
+             imageVector = Icons.Default.Lock,
+             contentDescription ="lock icon",
+             tint = MaterialTheme.colorScheme.primary,
+             modifier = Modifier.size(120.dp)
+         )
+        Spacer(modifier = Modifier.height(26.dp))
+
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },

@@ -71,22 +71,22 @@ fun DetailScreen(
                 ) {
                     Button(
                         onClick = { clothesViewModel.openTopLink(clothes.topLink) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onTertiary)
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                     ) {
-                        Text(text = "👕 Top Link", color = MaterialTheme.colorScheme.onSecondary)
+                        Text(text = "👕 Top Link")
                     }
                     Button(
                         onClick = { clothesViewModel.openBottomLink(clothes.bottomLink) },
-                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.onTertiary)
+                        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                     ) {
-                        Text(text = "👖 Bottom Link", color = MaterialTheme.colorScheme.onSecondary)
+                        Text(text = "👖 Bottom Link")
                     }
                 }
 
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.tertiary, shape = MaterialTheme.shapes.medium)
+                        .background(MaterialTheme.colorScheme.background, shape = MaterialTheme.shapes.medium)
                         .padding(8.dp)
                 ) {
                     Row(
@@ -100,48 +100,49 @@ fun DetailScreen(
                             modifier = Modifier.weight(1f),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.Edit, // İstediğin bir ikon
-                                contentDescription = "Add Comment",
-                                tint = MaterialTheme.colorScheme.onSecondary,
-                                modifier = Modifier.padding(end = 8.dp)
-                            )
+
                             OutlinedTextField(
                                 value = newComment,
                                 onValueChange = { newComment = it },
-                                placeholder = { Text("Yorum yaz...", color = MaterialTheme.colorScheme.onSecondary) },
-                                colors = TextFieldDefaults.textFieldColors(
-                                    containerColor = Color.Transparent,
-                                    cursorColor = MaterialTheme.colorScheme.onSecondary,
-                                    focusedIndicatorColor = Color.Transparent,
-                                    unfocusedIndicatorColor = Color.Transparent
-                                ),
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        IconButton(
-                            onClick = {
-                                if (newComment.isNotBlank()) {
-                                    commentsViewModel.addComment(
-                                        clothesId = clothes.id,
-                                        comment = Comment(
-                                            username = "Anonim",
-                                            content = newComment
+                                placeholder = { Text("Add your Desicion...",) },
+                                modifier = Modifier.weight(1f).fillMaxWidth(),
+                                trailingIcon = {
+                                    IconButton(
+                                        onClick = {
+                                            if (newComment.isNotBlank()) {
+                                                commentsViewModel.addComment(
+                                                    clothesId = clothes.id,
+                                                    comment = Comment(
+                                                        username = "Anonymous",
+                                                        content = newComment
+                                                    )
+                                                )
+                                                newComment = ""
+                                            }
+                                        },
+                                        colors = IconButtonDefaults.iconButtonColors(
+                                            containerColor = MaterialTheme.colorScheme.primary
                                         )
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.Default.Send, // Gönderme için bir ikon
+                                            contentDescription = "Send Comment",
+                                            tint = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+                                },
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Edit, // İstediğin bir ikon
+                                        contentDescription = "Add Comment",
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.padding(end = 8.dp)
                                     )
-                                    newComment = ""
                                 }
-                            },
-                            colors = IconButtonDefaults.iconButtonColors(
-                                containerColor = MaterialTheme.colorScheme.onTertiary
-                            )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Send, // Gönderme için bir ikon
-                                contentDescription = "Send Comment",
-                                tint = MaterialTheme.colorScheme.onSecondary
+
                             )
                         }
+
                     }
                 }
 
@@ -183,7 +184,7 @@ fun DetailScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 4.dp),
-                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
                             shape = MaterialTheme.shapes.small,
                             elevation = CardDefaults.cardElevation(8.dp)
                         ) {
@@ -206,7 +207,6 @@ fun DetailScreen(
                                     Text(
                                         text = comment.content,
                                         style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSecondary
                                     )
                                 }
                             }

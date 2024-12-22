@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.cumaliguzel.apps.components.ClothesDetailsBottomSheet
+import com.cumaliguzel.apps.components.GenderSelectionDropdown
 import com.cumaliguzel.apps.data.Clothes
 import com.cumaliguzel.apps.viewModel.BestClothesViewModel
 
@@ -36,7 +38,7 @@ fun BestPage(
     val bottomSheetState = rememberModalBottomSheetState()
 
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        GenderSelectionDropdowns(
+        GenderSelectionDropdown(
             selectedGender = selectedGender,
             onGenderSelected = { viewModel.setGender(it) }
         )
@@ -61,72 +63,13 @@ fun BestPage(
                 sheetState = bottomSheetState,
                 onDismissRequest = { selectedClothes = null }
             ) {
-                ClothesDetailsBottomSheets(clothes = selectedClothes!!)
+                ClothesDetailsBottomSheet(clothes = selectedClothes!!)
             }
         }
     }
 }
 
-@Composable
-fun GenderSelectionDropdowns(
-    selectedGender: String,
-    onGenderSelected: (String) -> Unit
-) {
-    var expanded by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-            .clickable { expanded = true }
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = if (selectedGender == "male") Icons.Default.Man else Icons.Default.Woman,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(44.dp)
-                    .padding(end = 8.dp),
-                tint = MaterialTheme.colorScheme.onTertiary
-            )
-            Text(
-                text = "Gender: ${if (selectedGender == "male") "Male" else "Female"}",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-            Icon(
-                imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSecondary
-            )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            DropdownMenuItem(
-                text = { Text("Male") },
-                onClick = {
-                    onGenderSelected("male")
-                    expanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Female") },
-                onClick = {
-                    onGenderSelected("female")
-                    expanded = false
-                }
-            )
-        }
-    }
-}
 
 @Composable
 fun ClothesCards(clothes: Clothes, onClick: () -> Unit) {
@@ -155,19 +98,4 @@ fun ClothesCards(clothes: Clothes, onClick: () -> Unit) {
     }
 }
 
-@Composable
-fun ClothesDetailsBottomSheets(clothes: Clothes) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        AsyncImage(
-            model = clothes.img,
-            contentDescription = "com.cumaliguzel.apps.data.Clothes Image",
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
+
