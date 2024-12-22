@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
 import com.cumaliguzel.apps.api.NetworkResponse
+import com.cumaliguzel.apps.components.CustomTopAppBar
 import com.cumaliguzel.apps.data.Clothes
 import com.cumaliguzel.apps.data.Comment
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
@@ -61,8 +62,9 @@ fun DetailScreen(
                 AsyncImage(
                     model = clothes.img,
                     contentDescription = "Clothes Image",
-                    modifier = Modifier.size(450.dp)
+                    modifier = Modifier.size(400.dp)
                 )
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -105,7 +107,7 @@ fun DetailScreen(
                                 tint = MaterialTheme.colorScheme.onSecondary,
                                 modifier = Modifier.padding(end = 8.dp)
                             )
-                            TextField(
+                            OutlinedTextField(
                                 value = newComment,
                                 onValueChange = { newComment = it },
                                 placeholder = { Text("Yorum yaz...", color = MaterialTheme.colorScheme.onSecondary) },
@@ -218,33 +220,3 @@ fun DetailScreen(
     }
 }
 
-@Composable
-fun CustomTopAppBar(
-    title: String,
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .background(MaterialTheme.colorScheme.onTertiary),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(
-            onClick = onBackClick,
-            modifier = Modifier.padding(start = 8.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.padding(start = 8.dp)
-        )
-    }
-}

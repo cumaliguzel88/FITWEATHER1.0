@@ -52,8 +52,8 @@ class ClothesViewModel(private val context: Context) : ViewModel() {
         val gender = _gender.value
         if (tempC != null) {
             val collectionName = when {
-                tempC < 15 -> if (gender == "male") "menwinter" else "womenwinter"
-                tempC in 15.0..22.0 -> if (gender == "male") "menspring" else "womenspring"
+                tempC < 16 -> if (gender == "male") "menwinter" else "womenwinter"
+                tempC in 16.0..22.0 -> if (gender == "male") "menspring" else "womenspring"
                 tempC > 22 -> if (gender == "male") "mensummer" else "womensummer"
                 else -> if (gender == "male") "menwinter" else "womenwinter"
             }

@@ -4,45 +4,26 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Man
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Woman
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import coil3.compose.AsyncImage
+import com.cumaliguzel.apps.R
+import com.cumaliguzel.apps.animations.LottieBox
 import com.cumaliguzel.apps.api.NetworkResponse
-import com.cumaliguzel.apps.api.WeatherModel
 import com.cumaliguzel.apps.components.ClothesCard
 import com.cumaliguzel.apps.components.GenderSelectionDropdown
 import com.cumaliguzel.apps.components.WeatherDetails
-import com.cumaliguzel.apps.data.Clothes
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherAndClothesPage(
@@ -84,15 +65,10 @@ fun WeatherAndClothesPage(
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                 when (val result = weatherResult) {
                     is NetworkResponse.Error -> {
-                        Text(
-                            text = "Error: ${result.message}",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
+                      LottieBox(animation = R.raw.eror_animation, modifier = Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
                     }
                     is NetworkResponse.Loading -> {
-                        CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                        LottieBox(animation = R.raw.animation_loading, modifier = Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
                     }
                     is NetworkResponse.Success -> {
                         WeatherDetails(
