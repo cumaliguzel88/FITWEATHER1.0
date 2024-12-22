@@ -1,15 +1,11 @@
 // MainActivity.kt
 package com.cumaliguzel.apps
 
-import com.cumaliguzel.apps.screens.WeatherAndClothesPage
-import com.cumaliguzel.apps.screens.FavoritesPage
-import com.cumaliguzel.apps.screens.BestPage
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -29,16 +25,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.cumaliguzel.apps.screens.DetailScreen
+import com.cumaliguzel.apps.onboarding.OnBoardingUtils
+import com.cumaliguzel.apps.onboarding.OnboardingScreen
+import com.cumaliguzel.apps.screens.*
 import com.cumaliguzel.apps.ui.theme.AppsTheme
-import com.cumaliguzel.apps.viewModel.BestClothesViewModel
-import com.cumaliguzel.apps.viewModel.ClothesViewModel
-import com.cumaliguzel.apps.viewModel.ClothesViewModelFactory
-import com.cumaliguzel.apps.viewModel.WeatherViewModel
-import com.cumaliguzel.apps.viewModel.CommentsViewModel
+import com.cumaliguzel.apps.viewModel.*
 
 class MainActivity : ComponentActivity() {
 
+    private val onBoardingUtils by lazy { OnBoardingUtils(this) }
     private lateinit var weatherViewModel: WeatherViewModel
     private lateinit var clothesViewModel: ClothesViewModel
     private lateinit var bestClothesViewModel: BestClothesViewModel
@@ -60,24 +55,36 @@ class MainActivity : ComponentActivity() {
     private fun initializeViewModels() {
         weatherViewModel = ViewModelProvider(this)[WeatherViewModel::class.java]
         bestClothesViewModel = ViewModelProvider(this)[BestClothesViewModel::class.java]
-
-        // ViewModelFactory ile ClothesViewModel oluşturuluyor
         val clothesViewModelFactory = ClothesViewModelFactory(applicationContext)
         clothesViewModel = ViewModelProvider(this, clothesViewModelFactory)[ClothesViewModel::class.java]
-
-        // CommentsViewModel oluşturuluyor
         commentsViewModel = ViewModelProvider(this)[CommentsViewModel::class.java]
     }
 
     @Composable
     private fun renderUI() {
         AppsTheme {
-            MainScreen(
-                weatherViewModel = weatherViewModel,
-                clothesViewModel = clothesViewModel,
-                bestClothesViewModel = bestClothesViewModel,
-                commentsViewModel = commentsViewModel
-            )
+            var isOnboardingCompleted by remember { mutableStateOf(onBoardingUtils.isOnboardingCompleted()) }
+
+            if (isOnboardingCompleted) {
+                MainScreen(
+                    weatherViewModel = weatherViewModel,
+                    clothesViewModel = clothesViewModel,
+                    bestClothesViewModel = bestClothesViewModel,
+                    commentsViewModel = commentsViewModel
+                )
+            } else {
+                ShowOnboardingScreen {
+                    onBoardingUtils.setOnboardingCompleted()
+                    isOnboardingCompleted = true
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun ShowOnboardingScreen(onFinished: () -> Unit) {
+        OnboardingScreen {
+            onFinished()
         }
     }
 }
@@ -90,12 +97,12 @@ fun MainScreen(
     bestClothesViewModel: BestClothesViewModel,
     commentsViewModel: CommentsViewModel
 ) {
-    val navController = rememberNavController() // NavController oluşturuluyor
+    val navController = rememberNavController()
 
     Scaffold(
         bottomBar = {
             BottomNavigationBar(
-                selectedTab = null, // Navigation ile artık bir `selectedTab` kullanmaya gerek yok
+                selectedTab = null,
                 onTabSelected = { tab ->
                     when (tab) {
                         0 -> navController.navigate("weather_and_clothes")
@@ -139,7 +146,6 @@ fun MainScreen(
                     )
                 }
             }
-
         }
     }
 }

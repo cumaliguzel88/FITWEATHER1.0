@@ -17,13 +17,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import com.cumaliguzel.apps.R
-import com.cumaliguzel.apps.animations.LottieBox
 import com.cumaliguzel.apps.api.NetworkResponse
 import com.cumaliguzel.apps.components.ClothesCard
 import com.cumaliguzel.apps.components.GenderSelectionDropdown
 import com.cumaliguzel.apps.components.WeatherDetails
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
+import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherAndClothesPage(
@@ -65,10 +66,10 @@ fun WeatherAndClothesPage(
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                 when (val result = weatherResult) {
                     is NetworkResponse.Error -> {
-                      LottieBox(animation = R.raw.eror_animation, modifier = Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
+                      LottieAnimationComposable(animationResId = R.raw.eror_animation,Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
                     }
                     is NetworkResponse.Loading -> {
-                        LottieBox(animation = R.raw.animation_loading, modifier = Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
+                        LottieAnimationComposable(animationResId = R.raw.animation_loading,Modifier.fillMaxSize().align(Alignment.CenterHorizontally))
                     }
                     is NetworkResponse.Success -> {
                         WeatherDetails(
