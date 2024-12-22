@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -16,6 +18,8 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -38,13 +42,14 @@ class MainActivity : ComponentActivity() {
     private lateinit var clothesViewModel: ClothesViewModel
     private lateinit var bestClothesViewModel: BestClothesViewModel
     private lateinit var commentsViewModel: CommentsViewModel
+    private lateinit var authViewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupEdgeToEdge()
         initializeViewModels()
         setContent {
-            renderUI()
+            RenderUI()
         }
     }
 
@@ -58,20 +63,27 @@ class MainActivity : ComponentActivity() {
         val clothesViewModelFactory = ClothesViewModelFactory(applicationContext)
         clothesViewModel = ViewModelProvider(this, clothesViewModelFactory)[ClothesViewModel::class.java]
         commentsViewModel = ViewModelProvider(this)[CommentsViewModel::class.java]
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
     }
 
     @Composable
-    private fun renderUI() {
+    private fun RenderUI() {
         AppsTheme {
             var isOnboardingCompleted by remember { mutableStateOf(onBoardingUtils.isOnboardingCompleted()) }
+            val authState by authViewModel.authState.observeAsState()
 
             if (isOnboardingCompleted) {
-                MainScreen(
-                    weatherViewModel = weatherViewModel,
-                    clothesViewModel = clothesViewModel,
-                    bestClothesViewModel = bestClothesViewModel,
-                    commentsViewModel = commentsViewModel
-                )
+                when (authState) {
+                    is AuthState.UnAuthenticated -> AuthNavigation(authViewModel)
+                    is AuthState.Authenticated -> MainScreen(
+                        weatherViewModel = weatherViewModel,
+                        clothesViewModel = clothesViewModel,
+                        bestClothesViewModel = bestClothesViewModel,
+                        commentsViewModel = commentsViewModel,
+                        authViewModel = authViewModel
+                    )
+                    else -> LoadingScreen()
+                }
             } else {
                 ShowOnboardingScreen {
                     onBoardingUtils.setOnboardingCompleted()
@@ -89,13 +101,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun MainScreen(
     weatherViewModel: WeatherViewModel,
     clothesViewModel: ClothesViewModel,
     bestClothesViewModel: BestClothesViewModel,
-    commentsViewModel: CommentsViewModel
+    commentsViewModel: CommentsViewModel,
+    authViewModel: AuthViewModel
 ) {
     val navController = rememberNavController()
 
@@ -122,7 +135,8 @@ fun MainScreen(
                 WeatherAndClothesPage(
                     weatherViewModel = weatherViewModel,
                     clothesViewModel = clothesViewModel,
-                    navController = navController
+                    navController = navController,
+                    authViewModel = authViewModel
                 )
             }
             composable("favorites") {
@@ -147,6 +161,26 @@ fun MainScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+fun AuthNavigation(authViewModel: AuthViewModel) {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "login") {
+        composable("login") {
+            LoginPage(navController = navController, authViewModel = authViewModel)
+        }
+        composable("signup") {
+            SignupPage(navController = navController, authViewModel = authViewModel)
+        }
+    }
+}
+
+@Composable
+fun LoadingScreen() {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
     }
 }
 

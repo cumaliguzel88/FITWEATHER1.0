@@ -15,15 +15,15 @@ class CommentsViewModel : ViewModel() {
 
     private val db = FirebaseFirestore.getInstance()
 
-    // Yorumların durumu (Loading, Success, Error)
+
     private val _commentsResult = MutableStateFlow<NetworkResponse<List<Comment>>>(NetworkResponse.Loading)
     val commentsResult: StateFlow<NetworkResponse<List<Comment>>> = _commentsResult
 
-    // Yorumları Firestore'dan Çekme
+
     fun fetchComments(clothesId: Int) {
-        _commentsResult.value = NetworkResponse.Loading // Yükleniyor durumu
+        _commentsResult.value = NetworkResponse.Loading
         db.collection("comments")
-            .whereEqualTo("clothesId", clothesId) // İlgili kıyafete ait yorumları getir
+            .whereEqualTo("clothesId", clothesId)
             .orderBy("commentId", Query.Direction.ASCENDING)
             .addSnapshotListener { snapshot, error ->
                 if (error != null) {
@@ -33,26 +33,26 @@ class CommentsViewModel : ViewModel() {
 
                 if (snapshot != null) {
                     val commentList = snapshot.toObjects(Comment::class.java)
-                    _commentsResult.value = NetworkResponse.Success(commentList) // Başarıyla yüklendi
+                    _commentsResult.value = NetworkResponse.Success(commentList)
                 } else {
-                    _commentsResult.value = NetworkResponse.Success(emptyList()) // Boş liste
+                    _commentsResult.value = NetworkResponse.Success(emptyList())
                 }
             }
     }
 
-    // Yeni Yorum Ekleme
+
     fun addComment(clothesId: Int, comment: Comment) {
         val documentRef = db.collection("comments").document()
         val commentWithId = comment.copy(
-            commentId = documentRef.id.hashCode(), // Benzersiz yorum ID'si
-            clothesId = clothesId // Kıyafet ID'sine bağlanıyor
+            commentId = documentRef.id.hashCode(),
+            clothesId = clothesId
         )
-        _commentsResult.value = NetworkResponse.Loading // Yükleniyor durumuna geç
+        _commentsResult.value = NetworkResponse.Loading
 
         documentRef.set(commentWithId)
             .addOnSuccessListener {
                 println("Comment added successfully!")
-                fetchComments(clothesId) // Yorum eklendiğinde güncel yorumları getir
+                fetchComments(clothesId)
             }
             .addOnFailureListener { error ->
                 println("Error adding comment: ${error.message}")

@@ -86,6 +86,8 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.5")
     //lottie dependencies
     implementation( "com.airbnb.android:lottie-compose:5.2.0")
+    //auth
+    implementation("com.google.firebase:firebase-auth")
 }
 
 
