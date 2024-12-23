@@ -33,11 +33,11 @@ fun DetailScreen(
     clothes: Clothes,
     navController: NavController
 ) {
-    val commentsResult = commentsViewModel.commentsResult.collectAsState() // Yorumların durumunu dinliyoruz
+    val commentsResult = commentsViewModel.commentsResult.collectAsState()
     var newComment by remember { mutableStateOf("") }
-    val snackbarHostState = remember { SnackbarHostState() }
 
-    // Sayfa açıldığında yorumları getir
+
+
     LaunchedEffect1(clothes.id) {
         commentsViewModel.fetchComments(clothes.id)
     }
@@ -49,7 +49,7 @@ fun DetailScreen(
                 onBackClick = { navController.popBackStack() }
             )
         },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -115,7 +115,7 @@ fun DetailScreen(
                                                 commentsViewModel.addComment(
                                                     clothesId = clothes.id,
                                                     comment = Comment(
-                                                        username = "Anonymous",
+                                                        username = "Anonim",
                                                         content = newComment
                                                     )
                                                 )

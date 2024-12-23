@@ -195,9 +195,8 @@ fun BottomNavigationBar(selectedTab: Int?, onTabSelected: (Int) -> Unit) {
         tonalElevation = 5.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .size(120.dp)
+            .size(105.dp)
             .clip(RoundedCornerShape(topStart = 34.dp, topEnd = 34.dp))
-            .background(MaterialTheme.colorScheme.onTertiary)
     ) {
         NavigationBarItem(
             icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home", tint = MaterialTheme.colorScheme.background) },

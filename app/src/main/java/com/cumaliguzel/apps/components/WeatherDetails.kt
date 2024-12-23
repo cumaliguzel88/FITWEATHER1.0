@@ -152,7 +152,8 @@ fun WeatherDetails(
                 IconButton(onClick = { isExpanded = !isExpanded }) {
                     Icon(
                         imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        contentDescription = "Toggle Details"
+                        contentDescription = "Toggle Details",
+                        tint = MaterialTheme.colorScheme.background
                     )
                 }
 
