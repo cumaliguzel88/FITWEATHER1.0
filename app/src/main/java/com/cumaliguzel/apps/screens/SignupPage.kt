@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -89,6 +90,7 @@ fun SignupPage(modifier: Modifier = Modifier,navController: NavController,authVi
             label = { Text(text = "Email") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            shape =  RoundedCornerShape(10.dp),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Email,
@@ -109,6 +111,7 @@ fun SignupPage(modifier: Modifier = Modifier,navController: NavController,authVi
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            shape =  RoundedCornerShape(10.dp),
             trailingIcon = {
                 val image =
                     if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff

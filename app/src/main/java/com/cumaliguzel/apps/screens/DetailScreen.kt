@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Send
@@ -63,7 +64,7 @@ fun DetailScreen(
                     contentDescription = "Clothes Image",
                     modifier = Modifier.size(400.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(18.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -82,17 +83,17 @@ fun DetailScreen(
                         Text(text = "👖 Bottom Link")
                     }
                 }
+                Spacer(modifier = Modifier.height(18.dp))
 
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(MaterialTheme.colorScheme.background, shape = MaterialTheme.shapes.medium)
-                        .padding(8.dp)
+
                 ) {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -106,6 +107,7 @@ fun DetailScreen(
                                 onValueChange = { newComment = it },
                                 placeholder = { Text("Add your Desicion...",) },
                                 modifier = Modifier.weight(1f).fillMaxWidth(),
+                                shape =  RoundedCornerShape(10.dp),
                                 trailingIcon = {
                                     IconButton(
                                         onClick = {

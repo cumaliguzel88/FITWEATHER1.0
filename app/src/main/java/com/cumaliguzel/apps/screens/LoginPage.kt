@@ -4,6 +4,7 @@ import android.widget.Toast
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -84,6 +85,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             label = { Text(text = "Email") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            shape =  RoundedCornerShape(10.dp),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Email,
@@ -102,6 +104,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             label = { Text(text = "Password") },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             singleLine = true,
+            shape =  RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth(),
             trailingIcon = {
                 val image =
