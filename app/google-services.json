@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "986265991665",
+    "project_id": "deneme-31005",
+    "storage_bucket": "deneme-31005.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986265991665:android:bc5ad45a49ccac01772c50",
+        "android_client_info": {
+          "package_name": "com.cumaliguzel.apps"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD42gC2IbCwv0riRxp3s5C5YLVN0TcUEnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:986265991665:android:8dd7b7efe46519bc772c50",
+        "android_client_info": {
+          "package_name": "com.cumaliguzel.tryout"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD42gC2IbCwv0riRxp3s5C5YLVN0TcUEnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
