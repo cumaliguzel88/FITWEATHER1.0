@@ -35,13 +35,13 @@ fun CustomTopAppBar(
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.background
+                tint = MaterialTheme.colorScheme.tertiary
             )
         }
         Text(
             text = title,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.tertiary,
             modifier = Modifier.padding(start = 8.dp)
         )
     }

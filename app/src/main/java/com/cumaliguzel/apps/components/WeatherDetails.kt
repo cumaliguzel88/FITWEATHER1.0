@@ -54,9 +54,9 @@ fun WeatherDetails(
     var cityName by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    // Hava durumu güncellendiğinde kıyafetleri değiştir
+
     LaunchedEffect(data.current.temp_c) {
-        clothesViewModel.fetchAndUpdateClothes(data) // Hava durumu verisini ClothesViewModel'e gönder
+        clothesViewModel.fetchAndUpdateClothes(data)
     }
 
     Column(
@@ -83,7 +83,8 @@ fun WeatherDetails(
                         contentDescription = "Location Icon",
                         tint = MaterialTheme.colorScheme.primary
                     )
-                }
+                },
+                shape = RoundedCornerShape(size = 15.dp)
 
             )
             IconButton(onClick = {
@@ -153,7 +154,7 @@ fun WeatherDetails(
                     Icon(
                         imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                         contentDescription = "Toggle Details",
-                        tint = MaterialTheme.colorScheme.background
+                        tint = MaterialTheme.colorScheme.tertiary
                     )
                 }
 

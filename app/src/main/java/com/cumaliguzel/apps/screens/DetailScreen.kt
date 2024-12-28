@@ -17,12 +17,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import com.cumaliguzel.apps.R
 import com.cumaliguzel.apps.api.NetworkResponse
 import com.cumaliguzel.apps.components.CustomTopAppBar
 import com.cumaliguzel.apps.data.Clothes
 import com.cumaliguzel.apps.data.Comment
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.CommentsViewModel
+import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
 import androidx.compose.runtime.LaunchedEffect as LaunchedEffect1
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,13 +76,13 @@ fun DetailScreen(
                         onClick = { clothesViewModel.openTopLink(clothes.topLink) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                     ) {
-                        Text(text = "👕 Top Link")
+                        Text(text = "👕 Top Link",color = MaterialTheme.colorScheme.tertiary)
                     }
                     Button(
                         onClick = { clothesViewModel.openBottomLink(clothes.bottomLink) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                     ) {
-                        Text(text = "👖 Bottom Link")
+                        Text(text = "👖 Bottom Link",color = MaterialTheme.colorScheme.tertiary)
                     }
                 }
                 Spacer(modifier = Modifier.height(18.dp))
@@ -127,15 +129,15 @@ fun DetailScreen(
                                         )
                                     ) {
                                         Icon(
-                                            imageVector = Icons.Default.Send, // Gönderme için bir ikon
+                                            imageVector = Icons.Default.Send,
                                             contentDescription = "Send Comment",
-                                            tint = MaterialTheme.colorScheme.secondary
+                                            tint = MaterialTheme.colorScheme.tertiary
                                         )
                                     }
                                 },
                                 leadingIcon = {
                                     Icon(
-                                        imageVector = Icons.Default.Edit, // İstediğin bir ikon
+                                        imageVector = Icons.Default.Edit,
                                         contentDescription = "Add Comment",
                                         tint = MaterialTheme.colorScheme.primary,
                                         modifier = Modifier.padding(end = 8.dp)
@@ -150,7 +152,7 @@ fun DetailScreen(
 
             }
 
-            // Yorumlar durumuna göre gösterim
+
             when (val result = commentsResult.value) {
                 is NetworkResponse.Loading -> {
                     item {
@@ -166,18 +168,9 @@ fun DetailScreen(
                 }
                 is NetworkResponse.Error -> {
                     item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = result.message,
-                                color = MaterialTheme.colorScheme.error,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
+                       LottieAnimationComposable(
+                           animationResId = R.raw.lottie_eror_animation,
+                       )
                     }
                 }
                 is NetworkResponse.Success -> {
@@ -202,13 +195,15 @@ fun DetailScreen(
                                 ) {
                                     Text(
                                         text = comment.username,
-                                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                                        color = MaterialTheme.colorScheme.onSecondary
+                                        style = MaterialTheme.typography.titleMedium,
+                                        color = MaterialTheme.colorScheme.tertiary
                                     )
                                     Spacer(modifier = Modifier.height(2.dp))
                                     Text(
                                         text = comment.content,
                                         style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.tertiary,
+                                        fontWeight = FontWeight.Bold
                                     )
                                 }
                             }

@@ -15,7 +15,7 @@ fun WeatherKeyValue(key: String, value: String) {
         modifier = Modifier.padding(5.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = key, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.background)
-        Text(text = value, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.background)
+        Text(text = key, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.tertiary)
+        Text(text = value, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.tertiary)
     }
 }

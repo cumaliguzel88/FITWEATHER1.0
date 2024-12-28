@@ -1,5 +1,8 @@
-package com.cumaliguzel.apps.screens
-
+package com.cumaliguzel.apps.navigation
+import com.cumaliguzel.apps.screens.BestPage
+import com.cumaliguzel.apps.screens.DetailScreen
+import com.cumaliguzel.apps.screens.FavoritesPage
+import com.cumaliguzel.apps.screens.WeatherAndClothesPage
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable

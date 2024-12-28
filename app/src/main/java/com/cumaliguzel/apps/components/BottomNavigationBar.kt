@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 fun BottomNavigationBar(selectedTab: Int?, onTabSelected: (Int) -> Unit) {
     NavigationBar(
         containerColor = MaterialTheme.colorScheme.primary,
-        contentColor = MaterialTheme.colorScheme.secondary,
         tonalElevation = 5.dp,
         modifier = Modifier
             .fillMaxWidth()
@@ -30,20 +29,20 @@ fun BottomNavigationBar(selectedTab: Int?, onTabSelected: (Int) -> Unit) {
             .clip(RoundedCornerShape(topStart = 34.dp, topEnd = 34.dp))
     ) {
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home", tint = MaterialTheme.colorScheme.background) },
-            label = { Text("Home", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold) },
+            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home", tint = MaterialTheme.colorScheme.tertiary) },
+            label = { Text("Home", color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold) },
             selected = selectedTab == 0,
             onClick = { onTabSelected(0) }
         )
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorites", tint = MaterialTheme.colorScheme.background) },
-            label = { Text("Favorites", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold) },
+            icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorites", tint = MaterialTheme.colorScheme.tertiary) },
+            label = { Text("Favorites", color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold) },
             selected = selectedTab == 1,
             onClick = { onTabSelected(1) }
         )
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Star, contentDescription = "Best", tint = MaterialTheme.colorScheme.background) },
-            label = { Text("Best", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Bold) },
+            icon = { Icon(imageVector = Icons.Default.Star, contentDescription = "Best", tint = MaterialTheme.colorScheme.tertiary) },
+            label = { Text("Best", color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold) },
             selected = selectedTab == 2,
             onClick = { onTabSelected(2) }
         )
