@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.cumaliguzel.apps.R
-import com.cumaliguzel.apps.data.WindowSize
 import com.cumaliguzel.apps.data.WindowType
 import com.cumaliguzel.apps.data.rememberWindowSize
 import com.cumaliguzel.apps.viewModel.AuthState

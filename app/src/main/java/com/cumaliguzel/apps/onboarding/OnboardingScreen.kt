@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cumaliguzel.apps.R
-import com.cumaliguzel.apps.data.WindowSize
 import com.cumaliguzel.apps.data.WindowType
 import com.cumaliguzel.apps.data.rememberWindowSize
 import kotlinx.coroutines.launch
@@ -39,7 +38,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 
     val windowSize = rememberWindowSize()
 
-    // Dinamik boyutlar
+
     val buttonFontSize = when (windowSize.width) {
         WindowType.Compact -> 14.sp
         WindowType.Medium -> 16.sp

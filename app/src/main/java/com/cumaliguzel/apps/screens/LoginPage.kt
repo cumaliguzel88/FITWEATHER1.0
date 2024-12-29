@@ -8,13 +8,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -30,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.cumaliguzel.apps.R
-import com.cumaliguzel.apps.data.WindowSize
 import com.cumaliguzel.apps.data.WindowType
 import com.cumaliguzel.apps.data.rememberWindowSize
 import com.cumaliguzel.apps.viewModel.AuthState
@@ -119,7 +116,7 @@ fun LoginPage(
             }
         )
 
-        Spacer(modifier = Modifier.height(verticalSpacing))
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = password,
@@ -151,7 +148,7 @@ fun LoginPage(
             onClick = { authViewModel.login(email, password) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = stringResource(R.string.login_page_login_button_label), fontSize = buttonFontSize)
+            Text(text = stringResource(R.string.login_page_login_button_label), fontSize = buttonFontSize, color = MaterialTheme.colorScheme.tertiary)
         }
 
         Spacer(modifier = Modifier.height(verticalSpacing))
@@ -159,6 +156,7 @@ fun LoginPage(
         Text(
             text = stringResource(R.string.login_page_goto_signup_text_label),
             fontSize = textFieldFontSize,
+            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier.clickable {
                 navController.navigate("signup")
             }

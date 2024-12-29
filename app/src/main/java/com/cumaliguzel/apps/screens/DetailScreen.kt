@@ -12,7 +12,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -25,10 +24,9 @@ import com.cumaliguzel.apps.data.Clothes
 import com.cumaliguzel.apps.data.Comment
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.CommentsViewModel
-import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
+import com.cumaliguzel.apps.animations.LottieAnimationComposable
 import androidx.compose.runtime.LaunchedEffect as LaunchedEffect1
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     clothesViewModel: ClothesViewModel,

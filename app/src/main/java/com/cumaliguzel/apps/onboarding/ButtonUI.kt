@@ -18,7 +18,7 @@ fun ButtonUI(
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     textColor: Color = MaterialTheme.colorScheme.tertiary,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
-    fontSize: Float = 14f, // `fontSize` Float türüne dönüştürüldü
+    fontSize: Float = 14f,
     onClick: () -> Unit,
 ) {
     Button(
@@ -35,7 +35,7 @@ fun ButtonUI(
     }
 }
 
-// Önizleme kısmı
+
 @Preview
 @Composable
 fun NextButtonPreview() {

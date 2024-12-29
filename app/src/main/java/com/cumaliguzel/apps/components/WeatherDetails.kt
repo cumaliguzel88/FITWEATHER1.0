@@ -44,7 +44,7 @@ import com.cumaliguzel.apps.R
 import com.cumaliguzel.apps.api.WeatherModel
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
-import com.cumaliguzel.apps.components.WeatherKeyValue
+
 
 @Composable
 fun WeatherDetails(

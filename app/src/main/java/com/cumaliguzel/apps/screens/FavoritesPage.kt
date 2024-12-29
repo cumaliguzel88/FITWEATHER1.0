@@ -16,7 +16,6 @@ import com.cumaliguzel.apps.components.ClothesCard
 import com.cumaliguzel.apps.components.ClothesDetailsBottomSheet
 import com.cumaliguzel.apps.components.EmptyFavoritesView
 import com.cumaliguzel.apps.data.Clothes
-import com.cumaliguzel.apps.data.WindowSize
 import com.cumaliguzel.apps.data.WindowType
 import com.cumaliguzel.apps.data.rememberWindowSize
 import com.cumaliguzel.apps.viewModel.ClothesViewModel

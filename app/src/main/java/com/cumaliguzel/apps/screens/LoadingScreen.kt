@@ -6,7 +6,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.cumaliguzel.apps.R
 import com.cumaliguzel.apps.viewModel.AuthState
-import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
+import com.cumaliguzel.apps.animations.LottieAnimationComposable
 
 @Composable
 fun LoadingScreen(authState: AuthState?) {

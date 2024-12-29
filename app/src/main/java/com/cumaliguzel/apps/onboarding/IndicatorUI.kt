@@ -19,11 +19,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun IndicatorUI(
-    pageSize: Int, // Toplam sayfa sayısı
-    currentPage: Int, // Şu anki sayfa
+    pageSize: Int,
+    currentPage: Int,
     selectedColor: Color = MaterialTheme.colorScheme.primary,
     unselectedColor: Color = MaterialTheme.colorScheme.tertiary,
-    indicatorSize: Dp = 14.dp // Dinamik boyutlandırma için Dp türü eklendi
+    indicatorSize: Dp = 14.dp
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,

@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cumaliguzel.apps.R
-import com.cumaliguzel.apps.data.WindowSize
 import com.cumaliguzel.apps.data.WindowType
 import com.cumaliguzel.apps.data.rememberWindowSize
 
@@ -32,7 +31,7 @@ fun BottomNavigationBar(
 ) {
     val windowSize = rememberWindowSize()
 
-    // Dinamik olarak değişen boyutlar
+
     val navigationBarHeight = when (windowSize.height) {
         WindowType.Compact -> 90.dp
         WindowType.Medium -> 99.dp
@@ -54,7 +53,7 @@ fun BottomNavigationBar(
             .clip(RoundedCornerShape(topStart = 34.dp, topEnd = 34.dp))
             .height(navigationBarHeight)
     ) {
-        // Ev sekmesi
+
         NavigationBarItem(
             icon = {
                 Icon(
@@ -75,7 +74,7 @@ fun BottomNavigationBar(
             onClick = { onTabSelected(0) }
         )
 
-        // Favoriler sekmesi
+
         NavigationBarItem(
             icon = {
                 Icon(
@@ -96,7 +95,7 @@ fun BottomNavigationBar(
             onClick = { onTabSelected(1) }
         )
 
-        // En Şık sekmesi
+
         NavigationBarItem(
             icon = {
                 Icon(

@@ -26,7 +26,7 @@ import com.cumaliguzel.apps.viewModel.AuthState
 import com.cumaliguzel.apps.viewModel.AuthViewModel
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
-import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
+import com.cumaliguzel.apps.animations.LottieAnimationComposable
 
 @Composable
 fun WeatherAndClothesPage(
