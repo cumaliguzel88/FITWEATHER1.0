@@ -15,8 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.cumaliguzel.apps.R
 
 @Composable
 fun BottomNavigationBar(selectedTab: Int?, onTabSelected: (Int) -> Unit) {
@@ -29,20 +31,20 @@ fun BottomNavigationBar(selectedTab: Int?, onTabSelected: (Int) -> Unit) {
             .clip(RoundedCornerShape(topStart = 34.dp, topEnd = 34.dp))
     ) {
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home", tint = MaterialTheme.colorScheme.tertiary) },
-            label = { Text("Home", color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold) },
+            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = stringResource(id = R.string.bottom_navigation_home_label), tint = MaterialTheme.colorScheme.tertiary) },
+            label = { Text(stringResource(id = R.string.bottom_navigation_home_label), color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold) },
             selected = selectedTab == 0,
             onClick = { onTabSelected(0) }
         )
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = "Favorites", tint = MaterialTheme.colorScheme.tertiary) },
-            label = { Text("Favorites", color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold) },
+            icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = stringResource(id = R.string.bottom_navigation_favorites_label), tint = MaterialTheme.colorScheme.tertiary) },
+            label = { Text(stringResource(id = R.string.bottom_navigation_favorites_label), color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold) },
             selected = selectedTab == 1,
             onClick = { onTabSelected(1) }
         )
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Star, contentDescription = "Best", tint = MaterialTheme.colorScheme.tertiary) },
-            label = { Text("Best", color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold) },
+            icon = { Icon(imageVector = Icons.Default.Star, contentDescription = stringResource(id = R.string.bottom_navigation_best_label), tint = MaterialTheme.colorScheme.tertiary) },
+            label = { Text(stringResource(id = R.string.bottom_navigation_best_label), color = MaterialTheme.colorScheme.tertiary, fontWeight = FontWeight.Bold) },
             selected = selectedTab == 2,
             onClick = { onTabSelected(2) }
         )

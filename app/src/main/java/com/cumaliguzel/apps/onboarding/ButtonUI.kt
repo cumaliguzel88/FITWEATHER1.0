@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 fun ButtonUI(
     text: String = "Next",
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
-    textColor: Color = MaterialTheme.colorScheme.background,
+    textColor: Color = MaterialTheme.colorScheme.tertiary,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
     fontSize: Int = 14,
     onClick: () -> Unit,
@@ -30,7 +30,7 @@ fun ButtonUI(
         ), shape = RoundedCornerShape(10.dp)
     ) {
         Text(
-            text = text, fontSize = fontSize.sp, style = textStyle
+            text = text, fontSize = fontSize.sp, style = textStyle, color = MaterialTheme.colorScheme.tertiary
         )
 
 

@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -47,7 +48,7 @@ fun DetailScreen(
     Scaffold(
         topBar = {
             CustomTopAppBar(
-                title = "Clothes Details",
+                title = stringResource(id = R.string.detail_page_title),
                 onBackClick = { navController.popBackStack() }
             )
         },
@@ -76,13 +77,13 @@ fun DetailScreen(
                         onClick = { clothesViewModel.openTopLink(clothes.topLink) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                     ) {
-                        Text(text = "👕 Top Link",color = MaterialTheme.colorScheme.tertiary)
+                        Text(text = stringResource(R.string.detail_page_top_link_label),color = MaterialTheme.colorScheme.tertiary)
                     }
                     Button(
                         onClick = { clothesViewModel.openBottomLink(clothes.bottomLink) },
                         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary)
                     ) {
-                        Text(text = "👖 Bottom Link",color = MaterialTheme.colorScheme.tertiary)
+                        Text(text = stringResource(R.string.detail_page_bottom_link_label),color = MaterialTheme.colorScheme.tertiary)
                     }
                 }
                 Spacer(modifier = Modifier.height(18.dp))
@@ -107,7 +108,7 @@ fun DetailScreen(
                             OutlinedTextField(
                                 value = newComment,
                                 onValueChange = { newComment = it },
-                                placeholder = { Text("Add your Desicion...",) },
+                                placeholder = { Text(text = stringResource(R.string.detail_page_text_field_label)) },
                                 modifier = Modifier.weight(1f).fillMaxWidth(),
                                 shape =  RoundedCornerShape(10.dp),
                                 trailingIcon = {

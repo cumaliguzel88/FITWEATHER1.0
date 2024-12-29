@@ -1,17 +1,13 @@
 package com.cumaliguzel.apps.onboarding
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import android.content.Context
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +17,7 @@ import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
 
 @Composable
 fun OnBoardingGraphUI(onBoardingModel: OnBoardingModel) {
+    val context = LocalContext.current // `Context`'i burada elde ediyoruz.
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -38,61 +35,25 @@ fun OnBoardingGraphUI(onBoardingModel: OnBoardingModel) {
 
         // Title text
         Text(
-            text = onBoardingModel.title,
+            text = onBoardingModel.title(context),
             modifier = Modifier.fillMaxWidth(),
             fontSize = 20.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
-
         )
         Spacer(modifier = Modifier.fillMaxWidth().size(15.dp))
 
         // Description text
         Text(
-            text = onBoardingModel.description,
+            text = onBoardingModel.description(context),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(25.dp, 0.dp),
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodySmall,
-
-
         )
         Spacer(modifier = Modifier.fillMaxWidth().size(5.dp))
     }
-}
-
-
-//Preview part each pages u can see easily how it looks like :)
-
-//First page preview
-@Preview(showBackground = true)
-@Composable
-fun OnBoardingGraphUIPreview1() {
-    OnBoardingGraphUI(onBoardingModel = OnBoardingModel.FirstPages)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OnBoardingGraphUIPreview2() {
-    OnBoardingGraphUI(onBoardingModel = OnBoardingModel.SecondPages)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OnBoardingGraphUIPreview3() {
-    OnBoardingGraphUI(onBoardingModel = OnBoardingModel.ThirdPages)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OnBoardingGraphUIPreview4() {
-    OnBoardingGraphUI(onBoardingModel = OnBoardingModel.ForthPages)
-}
-@Preview(showBackground = true)
-@Composable
-fun OnBoardingGraphUIPreview5() {
-    OnBoardingGraphUI(onBoardingModel = OnBoardingModel.FifthPages)
 }

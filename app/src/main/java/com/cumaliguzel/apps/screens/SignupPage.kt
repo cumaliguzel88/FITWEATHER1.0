@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -80,14 +81,14 @@ fun SignupPage(modifier: Modifier = Modifier,navController: NavController,authVi
         Spacer(modifier = Modifier.height(26.dp))
 
 
-        Text("Create an Account to Get Started", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+        Text(text = stringResource(R.string.signup_page_title), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
 
         Spacer(modifier = Modifier.height(26.dp))
 
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text(text = "Email") },
+            label = { Text(text = stringResource(R.string.signup_page_email_label)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             shape =  RoundedCornerShape(10.dp),
@@ -107,7 +108,7 @@ fun SignupPage(modifier: Modifier = Modifier,navController: NavController,authVi
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(R.string.signup_page_password_label)) },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
@@ -142,7 +143,7 @@ fun SignupPage(modifier: Modifier = Modifier,navController: NavController,authVi
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
-            Text(text = "Sign Up", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text(text = stringResource(R.string.signup_page_signup_button_label), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.tertiary)
         }
 
 

@@ -1,3 +1,72 @@
 <resources>
     <string name="app_name">FitWeather</string>
+    //-----------------------------------------------------
+    <string name="onboarding_button_next">Next</string>
+    <string name="onboarding_button_back">Back</string>
+    <string name="onboarding_first_title">What will you wear today ?</string>
+    <string name="onboarding_first_desc">Sometimes it can be hard to decide what to wear today. Let us help you decide and make your day stress-free!</string>
+    <string name="onboarding_second_title">Check the Weather, Pick Your Outfit</string>
+    <string name="onboarding_second_desc">Our app suggests the perfect outfit combinations based on the weather, so you can stay stylish and comfortable every day!</string>
+    <string name="onboarding_third_title">We have Left a Link for You</string>
+    <string name="onboarding_third_desc">Easily access the outfits you like and similar items with a simple link, making shopping for your favorite pieces hassle-free</string>
+    <string name="onboarding_forth_title">Add Your Thoughts</string>
+    <string name="onboarding_forth_desc">Share your opinions and feedback seamlessly with our comment feature</string>
+    <string name="onboarding_fifth_title">Let’s Start</string>
+    <string name="onboarding_fifth_desc">You’re ready to explore and start! Lets go</string>
+    //----------------------------------------------------------
+    <string name="login_page_email_label">Email</string>
+    <string name="login_page_password_label">Password</string>
+    <string name="login_page_login_button_label">Login</string>
+    <string name="login_page_goto_signup_text_label">Do not have an account? Sign Up</string>
+    //--------------------------------------------------------------
+    <string name="signup_page_title">"Create an Account to Get Started"</string>
+    <string name="signup_page_email_label">Email</string>
+    <string name="signup_page_password_label">Password</string>
+    <string name="signup_page_signup_button_label">Sign Up</string>
+    //----------------------------------------------------------------
+    <string name="weather_details_text_field_label">Search for any location</string>
+    <string name="weather_details_humidity_label">Humidity</string>
+    <string name="weather_details_feels_like_label">Feels Like</string>
+    <string name="weather_details_wind_speed_label">Wind Speed</string>
+    <string name="weather_details_precipitation_label">Precipitation</string>
+    <string name="weather_local_time_label">Local Time</string>
+    <string name="weather_local_date_label">Local Date</string>
+    //---------------------------------------------------------
+    <string name="drop_down_menu_gender_label">Gender:</string>
+    <string name="drop_down_menu_gender_male_label">Male</string>
+    <string name="drop_down_menu_gender_female_label">Female</string>
+    //---------------------------------------------------------
+    <string name="bottom_navigation_home_label">Home</string>
+    <string name="bottom_navigation_favorites_label">Favorites</string>
+    <string name="bottom_navigation_best_label">Best</string>
+    //---------------------------------------------------------
+    <string name="detail_page_title">Clothes Details</string>
+    <string name="detail_page_top_link_label">👕 Top Link</string>
+    <string name="detail_page_bottom_link_label">👖 Bottom Link</string>
+    <string name="detail_page_text_field_label">Add Your Decision..</string>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </resources>

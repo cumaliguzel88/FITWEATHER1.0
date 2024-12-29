@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -39,7 +40,7 @@ import androidx.navigation.NavController
 import com.cumaliguzel.apps.R
 import com.cumaliguzel.apps.viewModel.AuthState
 import com.cumaliguzel.apps.viewModel.AuthViewModel
-import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
+
 
 
 @Composable
@@ -82,7 +83,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text(text = "Email") },
+            label = { Text(text = stringResource(R.string.login_page_email_label)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             shape =  RoundedCornerShape(10.dp),
@@ -101,7 +102,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(R.string.login_page_password_label)) },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             singleLine = true,
             shape =  RoundedCornerShape(10.dp),
@@ -137,7 +138,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
         ) {
-            Text(text = "Login", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+            Text(text = stringResource(R.string.login_page_login_button_label), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.tertiary)
         }
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -148,7 +149,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             }
         ) {
             Text(
-                text = "Don't have an account? Sign Up",
+                text = stringResource(R.string.login_page_goto_signup_text_label),
                 fontSize = 15.sp,
                 textAlign = TextAlign.Center
             )

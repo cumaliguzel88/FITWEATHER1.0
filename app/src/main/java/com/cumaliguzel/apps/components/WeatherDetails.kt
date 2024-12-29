@@ -34,11 +34,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.cumaliguzel.apps.R
 import com.cumaliguzel.apps.api.WeatherModel
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
@@ -76,7 +78,7 @@ fun WeatherDetails(
                 modifier = Modifier.weight(1f),
                 value = cityName,
                 onValueChange = { cityName = it },
-                label = { Text("Search for any location: ") },
+                label = { Text(text = stringResource(R.string.weather_details_text_field_label)) },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.LocationCity,
@@ -163,8 +165,8 @@ fun WeatherDetails(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceAround,
                     ) {
-                        WeatherKeyValue(key = "Humidity", value = "${data.current.humidity}%")
-                        WeatherKeyValue(key = "Feels Like", value = "${data.current.feelslike_c}° C")
+                        WeatherKeyValue(key = stringResource(R.string.weather_details_humidity_label), value = "${data.current.humidity}%")
+                        WeatherKeyValue(key = stringResource(R.string.weather_details_feels_like_label), value = "${data.current.feelslike_c}° C")
                     }
                     if (isExpanded) {
                         Spacer(modifier = Modifier.height(10.dp))
@@ -172,19 +174,19 @@ fun WeatherDetails(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceAround,
                         ) {
-                            WeatherKeyValue(key = "Wind Speed", value = "${data.current.wind_kph} km/h")
-                            WeatherKeyValue(key = "Precipitation", value = "${data.current.precip_mm} mm")
+                            WeatherKeyValue(key = stringResource(R.string.weather_details_wind_speed_label), value = "${data.current.wind_kph} km/h")
+                            WeatherKeyValue(key = stringResource(R.string.weather_details_precipitation_label), value = "${data.current.precip_mm} mm")
                         }
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceAround,
                         ) {
                             WeatherKeyValue(
-                                key = "Local Time",
+                                key = stringResource(R.string.weather_local_time_label),
                                 value = data.location.localtime.split(' ')[1]
                             )
                             WeatherKeyValue(
-                                key = "Local Date",
+                                key = stringResource(R.string.weather_local_date_label),
                                 value = data.location.localtime.split(' ')[0]
                             )
                         }
