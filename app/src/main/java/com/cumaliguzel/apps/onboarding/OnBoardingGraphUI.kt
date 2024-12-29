@@ -13,47 +13,97 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cumaliguzel.apps.data.WindowType
+import com.cumaliguzel.apps.data.rememberWindowSize
 import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
 
 @Composable
 fun OnBoardingGraphUI(onBoardingModel: OnBoardingModel) {
-    val context = LocalContext.current // `Context`'i burada elde ediyoruz.
+    val context = LocalContext.current
+    val windowSize = rememberWindowSize() // Dinamik pencere boyutu alıyoruz.
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        // Lottie Animation
-        onBoardingModel.animationResId?.let { animationResId ->
-            LottieAnimationComposable(
-                animationResId = animationResId,
-                size = 300.dp
+    if (windowSize.width == WindowType.Expanded) {
+        // Landscape mode (Yatay)
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Animasyon
+            onBoardingModel.animationResId?.let { animationResId ->
+                LottieAnimationComposable(
+                    animationResId = animationResId,
+                    size = 200.dp // Yatay mod için daha küçük boyut
+                )
+            }
+
+            // Metinler
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
+                // Başlık
+                Text(
+                    text = onBoardingModel.title(context),
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Start,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // Açıklama
+                Text(
+                    text = onBoardingModel.description(context),
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Start,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
+        }
+    } else {
+        // Portrait mode (Dikey)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            // Animasyon
+            onBoardingModel.animationResId?.let { animationResId ->
+                LottieAnimationComposable(
+                    animationResId = animationResId,
+                    size = 300.dp // Dikey mod için daha büyük boyut
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Başlık
+            Text(
+                text = onBoardingModel.title(context),
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Açıklama
+            Text(
+                text = onBoardingModel.description(context),
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyLarge,
             )
         }
-        Spacer(modifier = Modifier.size(70.dp))
-
-        // Title text
-        Text(
-            text = onBoardingModel.title(context),
-            modifier = Modifier.fillMaxWidth(),
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.fillMaxWidth().size(15.dp))
-
-        // Description text
-        Text(
-            text = onBoardingModel.description(context),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(25.dp, 0.dp),
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodySmall,
-        )
-        Spacer(modifier = Modifier.fillMaxWidth().size(5.dp))
     }
 }

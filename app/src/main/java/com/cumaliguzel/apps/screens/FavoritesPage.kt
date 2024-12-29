@@ -16,11 +16,15 @@ import com.cumaliguzel.apps.components.ClothesCard
 import com.cumaliguzel.apps.components.ClothesDetailsBottomSheet
 import com.cumaliguzel.apps.components.EmptyFavoritesView
 import com.cumaliguzel.apps.data.Clothes
+import com.cumaliguzel.apps.data.WindowSize
+import com.cumaliguzel.apps.data.WindowType
+import com.cumaliguzel.apps.data.rememberWindowSize
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesPage(clothesViewModel: ClothesViewModel) {
+    val windowSize = rememberWindowSize()
     val favoriteKeys = clothesViewModel.favorites.collectAsState(emptyList())
     val clothesList by clothesViewModel.clothesList.collectAsState(emptyList())
     var selectedClothes by remember { mutableStateOf<Clothes?>(null) }
@@ -31,11 +35,18 @@ fun FavoritesPage(clothesViewModel: ClothesViewModel) {
         favoriteKeys.value.contains(clothes.id)
     }
 
+    // Grid sütun sayısını ayarla
+    val gridColumns = when (windowSize.width) {
+        WindowType.Compact -> 2
+        WindowType.Medium -> 3
+        WindowType.Expanded -> 4
+    }
+
     if (favoriteClothes.isEmpty()) {
         EmptyFavoritesView()
     } else {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(gridColumns),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier
@@ -59,9 +70,15 @@ fun FavoritesPage(clothesViewModel: ClothesViewModel) {
     }
 
     if (isBottomSheetVisible && selectedClothes != null) {
+        val bottomSheetHeight = when (windowSize.height) {
+            WindowType.Compact -> 0.6f
+            WindowType.Medium -> 0.75f
+            WindowType.Expanded -> 0.85f
+        }
+
         ModalBottomSheet(
             onDismissRequest = { isBottomSheetVisible = false },
-            modifier = Modifier.fillMaxHeight(0.8f)
+            modifier = Modifier.fillMaxHeight(bottomSheetHeight)
         ) {
             ClothesDetailsBottomSheet(clothes = selectedClothes!!)
         }

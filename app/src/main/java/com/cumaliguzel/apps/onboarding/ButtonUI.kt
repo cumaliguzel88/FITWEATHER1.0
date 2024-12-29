@@ -12,48 +12,44 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// we crate two buttons back and next -> start
 @Composable
 fun ButtonUI(
     text: String = "Next",
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     textColor: Color = MaterialTheme.colorScheme.tertiary,
     textStyle: TextStyle = MaterialTheme.typography.titleMedium,
-    fontSize: Int = 14,
+    fontSize: Float = 14f, // `fontSize` Float türüne dönüştürüldü
     onClick: () -> Unit,
-)
-{
-    //button
+) {
     Button(
-        onClick = onClick, colors = ButtonDefaults.buttonColors(
-            MaterialTheme.colorScheme.primary
-        ), shape = RoundedCornerShape(10.dp)
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(backgroundColor),
+        shape = RoundedCornerShape(10.dp)
     ) {
         Text(
-            text = text, fontSize = fontSize.sp, style = textStyle, color = MaterialTheme.colorScheme.tertiary
+            text = text,
+            fontSize = fontSize.sp,
+            style = textStyle,
+            color = textColor
         )
-
-
     }
-
 }
 
-//Preview part each buttons u can see easily how it looks like :)
+// Önizleme kısmı
 @Preview
 @Composable
-fun NextButton() {
-    ButtonUI (text = "Next") {
-    }
-
+fun NextButtonPreview() {
+    ButtonUI(text = "Next") {}
 }
 
 @Preview
 @Composable
-fun BackButton() {
-    ButtonUI(text = "Back",
+fun BackButtonPreview() {
+    ButtonUI(
+        text = "Back",
         backgroundColor = Color.Transparent,
         textColor = Color.Gray,
         textStyle = MaterialTheme.typography.bodySmall,
-        fontSize = 13) {
-    }
+        fontSize = 13f
+    ) {}
 }

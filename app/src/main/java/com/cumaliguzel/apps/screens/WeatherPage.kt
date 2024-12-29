@@ -20,18 +20,19 @@ import com.cumaliguzel.apps.api.NetworkResponse
 import com.cumaliguzel.apps.components.ClothesCard
 import com.cumaliguzel.apps.components.GenderSelectionDropdown
 import com.cumaliguzel.apps.components.WeatherDetails
+import com.cumaliguzel.apps.data.rememberWindowSize
+import com.cumaliguzel.apps.data.WindowType
 import com.cumaliguzel.apps.viewModel.AuthState
 import com.cumaliguzel.apps.viewModel.AuthViewModel
 import com.cumaliguzel.apps.viewModel.ClothesViewModel
 import com.cumaliguzel.apps.viewModel.WeatherViewModel
 import com.cumaliguzel.fitweather.animations.LottieAnimationComposable
 
-
 @Composable
 fun WeatherAndClothesPage(
     weatherViewModel: WeatherViewModel,
     clothesViewModel: ClothesViewModel,
-    authViewModel: AuthViewModel, // AuthViewModel'i ekledik
+    authViewModel: AuthViewModel,
     navController: NavController
 ) {
     val weatherResult by weatherViewModel.weatherResult.observeAsState()
@@ -40,10 +41,13 @@ fun WeatherAndClothesPage(
     val context = LocalContext.current
     val authState by authViewModel.authState.observeAsState()
 
+    // Ekran boyutu algılama
+    val windowSize = rememberWindowSize()
+
     // Auth kontrolü ve yönlendirme
     LaunchedEffect(authState) {
         when (authState) {
-            is AuthState.UnAuthenticated -> navController.navigate("login") // Eğer kullanıcı giriş yapmadıysa login sayfasına yönlendirilir
+            is AuthState.UnAuthenticated -> navController.navigate("login")
             else -> Unit
         }
     }
@@ -70,8 +74,14 @@ fun WeatherAndClothesPage(
 
     // Ana sayfa içeriği
     Column(modifier = Modifier.fillMaxSize()) {
+        val columnCount = when (windowSize.width) {
+            WindowType.Compact -> 2
+            WindowType.Medium -> 3
+            WindowType.Expanded -> 4
+        }
+
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(columnCount),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()

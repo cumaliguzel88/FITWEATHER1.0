@@ -8,21 +8,18 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Man
-import androidx.compose.material.icons.filled.Woman
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.cumaliguzel.apps.components.ClothesDetailsBottomSheet
 import com.cumaliguzel.apps.components.GenderSelectionDropdown
 import com.cumaliguzel.apps.data.Clothes
+import com.cumaliguzel.apps.data.WindowSize
+import com.cumaliguzel.apps.data.WindowType
+import com.cumaliguzel.apps.data.rememberWindowSize
 import com.cumaliguzel.apps.viewModel.BestClothesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,6 +30,7 @@ fun BestPage(
 ) {
     val bestClothesList by viewModel.bestClothesList.collectAsState()
     val selectedGender by viewModel.selectedGender.collectAsState()
+    val windowSize = rememberWindowSize()
 
     var selectedClothes by remember { mutableStateOf<Clothes?>(null) }
     val bottomSheetState = rememberModalBottomSheetState()
@@ -45,8 +43,14 @@ fun BestPage(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        val columnCount = when (windowSize.width) {
+            WindowType.Compact -> 2
+            WindowType.Medium -> 3
+            WindowType.Expanded -> 4
+        }
+
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(columnCount),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxSize()
@@ -69,8 +73,6 @@ fun BestPage(
     }
 }
 
-
-
 @Composable
 fun ClothesCards(clothes: Clothes, onClick: () -> Unit) {
     Card(
@@ -89,13 +91,10 @@ fun ClothesCards(clothes: Clothes, onClick: () -> Unit) {
         ) {
             AsyncImage(
                 model = clothes.img,
-                contentDescription = "com.cumaliguzel.apps.data.Clothes Image",
-                modifier = Modifier.size(500.dp)
+                contentDescription = "",
+                modifier = Modifier.size(400.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
-
         }
     }
 }
-
-

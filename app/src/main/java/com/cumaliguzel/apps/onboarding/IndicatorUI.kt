@@ -14,73 +14,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun IndicatorUI(
-    //we define the parameters of the indicator :)
-    pageSize : Int, //4
-    currentPage : Int, //current index like flutter
-    selectedColor : Color = MaterialTheme.colorScheme.primary,
-    unselectedColor : Color = MaterialTheme.colorScheme.tertiary,
+    pageSize: Int, // Toplam sayfa sayısı
+    currentPage: Int, // Şu anki sayfa
+    selectedColor: Color = MaterialTheme.colorScheme.primary,
+    unselectedColor: Color = MaterialTheme.colorScheme.tertiary,
+    indicatorSize: Dp = 14.dp // Dinamik boyutlandırma için Dp türü eklendi
 ) {
-    //we want to show the indicator in a row
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-    ){
-        //create a repeat works like a loop
-        //after create box and update the state
-        repeat(pageSize){
-            //little spacer between the indicators
-            Spacer(modifier = Modifier.size(2.5.dp))
-            //create a box
-            Box(modifier = Modifier
-                .height(14.dp)
-                .width(width = if (it == currentPage) 32.dp else 14.dp) //  if u r current page indicator get big
-                .clip(RoundedCornerShape(10.dp))
-                .background(color = if(it == currentPage) selectedColor else unselectedColor) // if u r current page indicator color change
+    ) {
+        repeat(pageSize) {
+            Spacer(modifier = Modifier.size(2.dp))
+            Box(
+                modifier = Modifier
+                    .height(indicatorSize)
+                    .width(if (it == currentPage) (indicatorSize * 2.5f) else indicatorSize)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(color = if (it == currentPage) selectedColor else unselectedColor)
             )
-            Spacer(modifier = Modifier.size(2.5.dp))
-
+            Spacer(modifier = Modifier.size(2.dp))
         }
     }
-
 }
-//Preview part each pages u can see easily how it looks like :)
-@Preview(showBackground = true)
-@Composable
-fun IndicatorUIPreview1() {
-
-    IndicatorUI(pageSize = 5, currentPage = 0)
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun IndicatorUIPreview2() {
-
-    IndicatorUI(pageSize = 5, currentPage = 1)
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun IndicatorUIPreview3() {
-
-    IndicatorUI(pageSize = 5, currentPage = 2)
-
-}
-@Preview(showBackground = true)
-@Composable
-fun IndicatorUIPreview4() {
-
-    IndicatorUI(pageSize = 5, currentPage = 3)
-}
-@Preview(showBackground = true)
-@Composable
-fun IndicatorUIPreview5() {
-
-    IndicatorUI(pageSize = 5, currentPage = 4)
-}
-

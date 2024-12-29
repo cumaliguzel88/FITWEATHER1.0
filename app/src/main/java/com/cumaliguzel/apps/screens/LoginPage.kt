@@ -1,50 +1,48 @@
 package com.cumaliguzel.apps.screens
 
 import android.widget.Toast
-
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.cumaliguzel.apps.R
+import com.cumaliguzel.apps.data.WindowSize
+import com.cumaliguzel.apps.data.WindowType
+import com.cumaliguzel.apps.data.rememberWindowSize
 import com.cumaliguzel.apps.viewModel.AuthState
 import com.cumaliguzel.apps.viewModel.AuthViewModel
 
-
-
 @Composable
-fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+fun LoginPage(
+    navController: NavController,
+    authViewModel: AuthViewModel
+) {
+    val windowSize = rememberWindowSize()
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -62,23 +60,48 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
     }
 
 
+    val horizontalPadding = when (windowSize.width) {
+        WindowType.Compact -> 16.dp
+        WindowType.Medium -> 24.dp
+        WindowType.Expanded -> 32.dp
+    }
+
+    val textFieldFontSize = when (windowSize.width) {
+        WindowType.Compact -> 14.sp
+        WindowType.Medium -> 16.sp
+        WindowType.Expanded -> 18.sp
+    }
+
+    val buttonFontSize = when (windowSize.width) {
+        WindowType.Compact -> 14.sp
+        WindowType.Medium -> 16.sp
+        WindowType.Expanded -> 18.sp
+    }
+
+    val verticalSpacing = when (windowSize.height) {
+        WindowType.Compact -> 8.dp
+        WindowType.Medium -> 12.dp
+        WindowType.Expanded -> 16.dp
+    }
+    val iconSize = when (windowSize.width) {
+        WindowType.Compact -> 100.dp
+        WindowType.Medium -> 120.dp
+        WindowType.Expanded -> 140.dp
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = horizontalPadding),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-
-         Icon(
-             imageVector = Icons.Default.Lock,
-             contentDescription ="lock icon",
-             tint = MaterialTheme.colorScheme.primary,
-             modifier = Modifier.size(120.dp)
-         )
-        Spacer(modifier = Modifier.height(26.dp))
+        Icon(
+            imageVector = Icons.Default.Lock,
+            contentDescription = "lock icon",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(iconSize)
+        )
 
         OutlinedTextField(
             value = email,
@@ -86,18 +109,17 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             label = { Text(text = stringResource(R.string.login_page_email_label)) },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            shape =  RoundedCornerShape(10.dp),
+            shape = RoundedCornerShape(17.dp),
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Email,
-                    contentDescription = "",
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
-
             }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(verticalSpacing))
 
         OutlinedTextField(
             value = password,
@@ -105,55 +127,41 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             label = { Text(text = stringResource(R.string.login_page_password_label)) },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             singleLine = true,
-            shape =  RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(17.dp),
             trailingIcon = {
                 val image =
                     if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                val description = if (passwordVisible) "Hide password" else "Show password"
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(imageVector = image, contentDescription = description)
+                    Icon(imageVector = image, contentDescription = null)
                 }
             },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Key,
-                    contentDescription = "",
+                    contentDescription = null,
                     tint = MaterialTheme.colorScheme.primary
                 )
-
             }
-
         )
 
-
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(verticalSpacing))
 
         Button(
-            onClick = {
-                authViewModel.login(email,password)
-            },
-            enabled = authState.value != AuthState.Loading,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+            onClick = { authViewModel.login(email, password) },
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = stringResource(R.string.login_page_login_button_label), fontWeight = FontWeight.Bold, fontSize = 15.sp, color = MaterialTheme.colorScheme.tertiary)
+            Text(text = stringResource(R.string.login_page_login_button_label), fontSize = buttonFontSize)
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(verticalSpacing))
 
-        TextButton(
-            onClick = {
+        Text(
+            text = stringResource(R.string.login_page_goto_signup_text_label),
+            fontSize = textFieldFontSize,
+            modifier = Modifier.clickable {
                 navController.navigate("signup")
             }
-        ) {
-            Text(
-                text = stringResource(R.string.login_page_goto_signup_text_label),
-                fontSize = 15.sp,
-                textAlign = TextAlign.Center
-            )
-        }
+        )
     }
-
 }

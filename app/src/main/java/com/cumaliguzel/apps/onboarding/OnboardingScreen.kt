@@ -7,15 +7,17 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.cumaliguzel.apps.R
+import com.cumaliguzel.apps.data.WindowSize
+import com.cumaliguzel.apps.data.WindowType
+import com.cumaliguzel.apps.data.rememberWindowSize
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -35,11 +37,32 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 
     val scope = rememberCoroutineScope()
 
+    val windowSize = rememberWindowSize()
+
+    // Dinamik boyutlar
+    val buttonFontSize = when (windowSize.width) {
+        WindowType.Compact -> 14.sp
+        WindowType.Medium -> 16.sp
+        WindowType.Expanded -> 18.sp
+    }
+
+    val indicatorSize = when (windowSize.width) {
+        WindowType.Compact -> 12.dp
+        WindowType.Medium -> 14.dp
+        WindowType.Expanded -> 16.dp
+    }
+
+    val bottomPadding = when (windowSize.height) {
+        WindowType.Compact -> 40.dp
+        WindowType.Medium -> 60.dp
+        WindowType.Expanded -> 70.dp
+    }
+
     Scaffold(bottomBar = {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp, 70.dp),
+                .padding(10.dp, bottomPadding),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -52,7 +75,8 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                     ButtonUI(
                         text = stringResource(id = R.string.onboarding_button_back),
                         backgroundColor = Color.Transparent,
-                        textColor = Color.Gray
+                        textColor = Color.Gray,
+                        fontSize = buttonFontSize.value
                     ) {
                         scope.launch {
                             if (pagerState.currentPage > 0) {
@@ -68,7 +92,11 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                IndicatorUI(pageSize = pages.size, currentPage = pagerState.currentPage)
+                IndicatorUI(
+                    pageSize = pages.size,
+                    currentPage = pagerState.currentPage,
+                    indicatorSize = indicatorSize
+                )
             }
 
             // Next or Start button
@@ -84,7 +112,8 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                 ButtonUI(
                     text = nextButtonText,
                     backgroundColor = MaterialTheme.colorScheme.primary,
-                    textColor = MaterialTheme.colorScheme.onPrimary
+                    textColor = MaterialTheme.colorScheme.onPrimary,
+                    fontSize = buttonFontSize.value
                 ) {
                     scope.launch {
                         if (pagerState.currentPage < pages.size - 1) {
