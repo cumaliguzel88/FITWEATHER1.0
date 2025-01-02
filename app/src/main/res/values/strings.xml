@@ -3,6 +3,7 @@
     //-----------------------------------------------------
     <string name="onboarding_button_next">Next</string>
     <string name="onboarding_button_back">Back</string>
+    <string name="onboarding_button_start">Start</string>
     <string name="onboarding_first_title">What will you wear today ?</string>
     <string name="onboarding_first_desc">Sometimes it can be hard to decide what to wear today. Let us help you decide and make your day stress-free!</string>
     <string name="onboarding_second_title">Check the Weather, Pick Your Outfit</string>
