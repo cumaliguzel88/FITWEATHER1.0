@@ -36,7 +36,6 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 
     val windowSize = rememberWindowSize()
 
-
     val buttonFontSize = when (windowSize.width) {
         WindowType.Compact -> 14.sp
         WindowType.Medium -> 16.sp
@@ -102,9 +101,9 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                 contentAlignment = Alignment.CenterEnd
             ) {
                 val nextButtonText = if (pagerState.currentPage == pages.size - 1) {
-                    stringResource(id = R.string.onboarding_button_back)
+                    stringResource(id = R.string.onboarding_button_start) // "Start" olacak
                 } else {
-                    stringResource(id = R.string.onboarding_button_next)
+                    stringResource(id = R.string.onboarding_button_next) // Diğer sayfalar için "Next"
                 }
                 ButtonUI(
                     text = nextButtonText,
